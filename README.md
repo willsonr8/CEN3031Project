@@ -1,2 +1,2 @@
-# CEN3031Project
+# Prescription Drug Explorer
 CEN3031 Semester Project
