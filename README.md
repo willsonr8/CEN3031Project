@@ -1,2 +1,2 @@
-# Prescription Drug Explorer
+# Medicate
 CEN3031 Semester Project
