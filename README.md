@@ -23,21 +23,21 @@ For Windows:
 
 Install Dependencies:
 
-pip install -r requirements.txt
+	pip install -r requirements.txt
 
 Database Migrations:
 
-python manage.py makemigrations
+	python manage.py makemigrations
 
-python manage.py migrate
+	python manage.py migrate
 
 Create a Superuser:
 
-python manage.py createsuperuser
+	python manage.py createsuperuser
 
 Run Server:
 
-python manage.py runserver
+	python manage.py runserver
 
 Frontend Setup
 
@@ -45,8 +45,8 @@ Navigate to the Frontend Directory.
 
 Install Dependencies:
 
-npm install
+	npm install
 
 Start Server:
 
-npm run dev
+	npm run dev
