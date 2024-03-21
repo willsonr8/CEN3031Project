@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState('Hello World!');
 
     useEffect(() => {
-        fetch('http://localhost:8000/hello/')
+        fetch('http://localhost:3000/hello/')
             .then((res) => res.json())
             .then((data) => {
                 setMessage(data.message);
