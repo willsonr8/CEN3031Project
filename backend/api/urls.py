@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import hello_view, get_data
+from . import views
 
 
 urlpatterns = [
-    path('hello/', hello_view, name='hello'),
-    path('api/data/', get_data, name='get_data'),
+    path('api/get_data/', views.get_data, name='get_data'),
+    path('api/name_search/', views.name_search, name='name_search'),
 ]

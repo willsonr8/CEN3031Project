@@ -1,15 +1,19 @@
 from django.http import JsonResponse
-from .models import Message
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
+from .RxNorm import Rx
 
-@api_view(['GET'])
 def get_data(request):
-    data = {'message': 'Hello from Django!'}
-    return Response(data)
+    message = {'text': 'Hello from Django!'}
+    return JsonResponse(message)
 
-def hello_view(request):
-    # there's at least one Message instance in the database
-    message = Message.objects.first().greeting
-    data = {"message": message}
-    return JsonResponse(data)
+@csrf_exempt
+def name_search(request):
+    print(request.POST)
+    drug_name = request.POST.get("name")
+    print("Received drug name:", drug_name)
+    if drug_name is not None:
+        search_results = Rx.get_drugs(drug_name)
+        return JsonResponse(search_results)
+    else:
+        return JsonResponse({'error': 'No drug name provided'})
+
