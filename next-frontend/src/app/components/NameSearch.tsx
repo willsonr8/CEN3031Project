@@ -1,6 +1,8 @@
 'use client'
 import React, { useState } from 'react';
 import axios from 'axios';
+import {Button} from '@nextui-org/button';
+import {Input} from "@nextui-org/react";
 
 const NameSearch = () => {
     const [drug_name, set_drug_name] = useState('');
@@ -40,14 +42,14 @@ const NameSearch = () => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input
+                <Input
                     type="text"
                     value={drug_name}
                     onChange={(e) => set_drug_name(e.target.value)}
                     placeholder="Enter your drug name"
                     style={{color: 'black'}}
                 />
-                <button type="submit">Submit</button>
+                <Button type="submit">Submit</Button>
             </form>
             {responseData && (
                 <div>
