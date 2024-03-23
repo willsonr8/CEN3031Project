@@ -1,11 +1,12 @@
 import React from 'react';
 import HelloMessage from './components/HelloMessage';
 import NameSearch from './components/NameSearch';
+import NavBar from './components/NavBar';
 
 const HomePage = () => {
     return (
         <div style={{ textAlign: 'center', fontSize: '24px' }}>
-            <h1>Welcome to My Next.js App</h1>
+            <NavBar />
             <HelloMessage />
             <NameSearch />
         </div>
