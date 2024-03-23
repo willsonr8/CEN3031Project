@@ -19,7 +19,7 @@ const HelloMessage: React.FC = () => {
     }, []);
 
     return (
-        <div>
+        <div className="text-white">
             <p>{message}</p>
         </div>
     );
