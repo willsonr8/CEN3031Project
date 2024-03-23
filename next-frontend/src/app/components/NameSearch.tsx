@@ -16,6 +16,27 @@ const NameSearch = () => {
             console.error('Error', error);
         }
     };
+
+    function GenericNames() {
+        if (responseData && responseData.drugGroup) {
+
+            let listItems = [];
+          
+            for (let group of responseData.drugGroup.conceptGroup) {
+                if (group.conceptProperties) {
+                    for (let concept of group.conceptProperties) {
+                        listItems.push(
+                        <li key={concept.rxcui}>{concept.name}</li>
+                        );
+                    }
+                }
+            }
+          
+            return listItems;
+        } else {
+            return null;
+        }
+    }
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -30,8 +51,10 @@ const NameSearch = () => {
             </form>
             {responseData && (
                 <div>
-                    <h2>Search Results:</h2>
-                    <pre>{JSON.stringify(responseData, null, 2)}</pre>
+                    <h2>Generic Names:</h2>
+                    <ul>
+                        {GenericNames()}
+                    </ul>
                 </div>
                 )}
         </div>
