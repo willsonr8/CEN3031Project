@@ -1,9 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import styles from "./home.module.css";
+import HelloMessage from './components/HelloMessage';
+import NameSearch from './components/NameSearch';
+import NavBar from './components/NavBar';
 
 const HomePage = () => {
     return (
+      <div style={{ textAlign: 'center', fontSize: '24px' }}>
+            <NavBar />
+            <HelloMessage />
+            <NameSearch />
+        </div>
         <div className={styles.container}>
             <div>Medicate</div>
             <div className={styles.buttonContainer}>
@@ -14,7 +22,6 @@ const HomePage = () => {
                     <div className={styles.button}>Login</div>
                 </Link>
             </div>
-        </div>
     );
 };
 
