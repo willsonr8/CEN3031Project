@@ -1,7 +1,7 @@
 # Medicate
 CEN3031 Semester Project
 
-# simple django + next.js web app to use as starting point. It prints hello on the screen.
+Basic search functionality
 
 Backend Setup
 
@@ -31,7 +31,7 @@ Database Migrations:
 
 	python manage.py migrate
 
-Create a Superuser:
+Create a Superuser: (optional for now)
 
 	python manage.py createsuperuser
 
