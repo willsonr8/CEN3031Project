@@ -41,26 +41,26 @@ const NameSearch = () => {
         }
     }
     return (
-        <div className="flex flex-col items-center w-full">
-            <form onSubmit={handleSubmit} className="w-full max-w-md flex justify-between items-center mb-4">
+        <div className="flex flex-col  items-center w-full">
+            <form onSubmit={handleSubmit} className="w-full space-x-2 max-w-md flex justify-between items-center mb-4">
                 <Input
                     value={drug_name}
                     onChange={(e) => set_drug_name(e.target.value)}
                     isClearable
                     type="search"
                     label="Search"
-                    radius="lg"
+                    radius="full"
                     classNames={{
                     label: "text-black/50 dark:text-white/90",
                     input: [
-                            "bg-transparent",
+                            "bg-white",
                             "text-black/90 dark:text-white/90",
                             "placeholder:text-default-700/50 dark:placeholder:text-white/60",
                             ],
-                    innerWrapper: "bg-transparent",
+                    innerWrapper: "bg-white",
                     inputWrapper: [
                                     "shadow-xl",
-                                    "bg-default-200/50",
+                                    "bg-white",
                                     "dark:bg-default/60",
                                     "backdrop-blur-xl",
                                     "backdrop-saturate-200",
@@ -71,12 +71,12 @@ const NameSearch = () => {
                                     "!cursor-text",
                                 ],
                     }}
-                    placeholder="Type to search..."
+                    placeholder="Type medication name..."
                     startContent={
                         <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
                     }
                 />
-                <Button type="submit">Submit</Button>
+                <Button radius="full" size="lg" type="submit" color="primary" variant="solid">Search</Button>
             </form>
             {responseData && (
                 <div className="w-full max-w-2xl text-white">
