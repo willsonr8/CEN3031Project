@@ -5,9 +5,9 @@ import NavBar from "../components/AccountNavbar";
 
 const SearchPage = () => {
     return (
-        <div className="red-dark text-foreground bg-background" style={{ textAlign: 'center', fontSize: '24px' }}>
+        <div style={{ textAlign: 'center', fontSize: '24px' }}>
             <NavBar />
-           <NameSearch />
+            <NameSearch />
         </div>
     );
 };

@@ -5,7 +5,7 @@ import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nex
 
 const NavBar = () => {
     return (
-        <Navbar isBordered>
+        <Navbar isBordered className="red-dark text-foreground bg-background">
       <NavbarBrand>
         <p color="#3c009d" className="font-bold text-inherit">Medicate</p>
       </NavbarBrand>

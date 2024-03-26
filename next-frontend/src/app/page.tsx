@@ -8,7 +8,7 @@ import NavBar from './components/HomePageNavbar';
 
 const HomePage = () => {
     return (
-      <div className="red-dark text-foreground bg-background" style={{ textAlign: 'center', fontSize: '24px' }}>
+      <div style={{ textAlign: 'center', fontSize: '24px' }}>
             <NavBar />
             <HelloMessage />
             <NameSearch />

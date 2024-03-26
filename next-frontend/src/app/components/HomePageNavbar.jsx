@@ -4,7 +4,7 @@ import styles from "../home.module.css";
 
 export default function NavBar() {
   return (
-    <Navbar isBordered>
+    <Navbar isBordered  className="red-dark text-foreground bg-background" >
       <NavbarBrand>
         <p color="#3c009d" className="font-bold text-inherit">Medicate</p>
       </NavbarBrand>

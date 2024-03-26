@@ -5,7 +5,7 @@ import styles from "../home.module.css";
 import NameSearch from "../components/NameSearch";
 const AccountPage = () => {
     return (
-        <div className="red-dark text-foreground bg-background">
+        <div>
             <NavBar />
             <NameSearch />
         </div>

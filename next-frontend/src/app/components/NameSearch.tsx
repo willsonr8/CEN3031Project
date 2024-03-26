@@ -57,7 +57,7 @@ const NameSearch = () => {
                     label: "text-black/50 dark:text-white/90",
                     input: [
                             "bg-white",
-                            "text-black/90 dark:text-white/90",
+                            "text-black",
                             "placeholder:text-default-700/50 dark:placeholder:text-white/60",
                             ],
                     innerWrapper: "bg-white",
@@ -79,7 +79,7 @@ const NameSearch = () => {
                         <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
                     }
                 />
-                <Button radius="full" size="lg" type="submit" color="primary" variant="solid">Search</Button>
+                <Button  className="red-dark" radius="full" size="lg" type="submit" color="primary" variant="solid">Search</Button>
             </form>
             {responseData && (
                 <div className="w-full max-w-2xl text-white">
