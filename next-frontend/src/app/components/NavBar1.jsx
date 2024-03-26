@@ -1,11 +1,12 @@
 import React from "react";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
+import styles from "../home.module.css";
 
 export default function NavBar() {
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <p className="font-bold text-inherit">MEDICATE</p>
+        <p color="#3c009d" className="font-bold text-inherit">Medicate</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>

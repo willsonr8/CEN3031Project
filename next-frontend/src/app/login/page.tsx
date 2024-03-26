@@ -5,6 +5,7 @@ import styles from "../home.module.css";
 
 const Login = () => {
     return (
+        <div className={styles.wrapper}>
         <div className={styles.container}>
             <div>Medicate</div>
             <div className={styles.text}>Login</div>
@@ -37,6 +38,7 @@ const Login = () => {
                     <div className={styles.button}>Login</div>
                 </Link>
             </div>
+        </div>
         </div>
     );
 };

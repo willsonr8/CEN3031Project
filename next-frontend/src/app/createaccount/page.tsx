@@ -5,6 +5,7 @@ import styles from "../home.module.css";
 
 const CreateAccountPage = () => {
     return (
+        <div className={styles.wrapper}>
         <div className={styles.container}>
             <div>Medicate</div>
             <div className={styles.text}>Create an Account</div>
@@ -54,6 +55,7 @@ const CreateAccountPage = () => {
                     <div className={styles.button}>Create Account</div>
                 </Link>
             </div>
+        </div>
         </div>
     );
 };
