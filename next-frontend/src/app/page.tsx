@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./home.module.css";
 import HelloMessage from './components/HelloMessage';
 import NameSearch from './components/NameSearch';
-import NavBar from './components/NavBar1';
+import NavBar from './components/HomePageNavbar';
 
 
 const HomePage = () => {

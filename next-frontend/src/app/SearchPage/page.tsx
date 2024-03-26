@@ -1,6 +1,6 @@
 import React from "react";
 import NameSearch from "../components/NameSearch";
-import NavBar from "../components/Navbar";
+import NavBar from "../components/AccountNavbar";
 
 
 const SearchPage = () => {
