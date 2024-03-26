@@ -24,18 +24,21 @@ const NameSearch = () => {
         if (responseData && responseData.drugGroup) {
 
             let listItems = [];
-          
-            for (let group of responseData.drugGroup.conceptGroup) {
-                if (group.conceptProperties) {
-                    for (let concept of group.conceptProperties) {
-                        listItems.push(
-                        <li key={concept.rxcui}>{concept.name}</li>
-                        );
+            try {
+                for (let group of responseData.drugGroup.conceptGroup) {
+                    if (group.conceptProperties) {
+                        for (let concept of group.conceptProperties) {
+                            listItems.push(
+                                <li key={concept.rxcui}>{concept.synonym}</li>
+                            );
+                        }
                     }
                 }
+
+                return listItems;
+            } catch (error) {
+                console.error('No drug found', error)
             }
-          
-            return listItems;
         } else {
             return null;
         }

@@ -19,6 +19,7 @@ def name_search(request):
 
         if drug_name is not None:
             search_results = Rx.get_drugs(drug_name)
+            print(search_results)
             return JsonResponse(search_results)
         else:
             return JsonResponse({'error': 'No drug name provided'})
