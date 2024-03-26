@@ -7,11 +7,14 @@ export const metadata: Metadata = {
     description: "Team 12",
 };
 
+import React from "react";
+
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
+  const inter = { className: "your-class-name" }; // Replace "your-class-name" with the actual class name
   return (
     <html lang="en" className='light'>
       <body className={inter.className}>

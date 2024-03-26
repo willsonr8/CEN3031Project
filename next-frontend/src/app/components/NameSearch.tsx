@@ -45,7 +45,7 @@ const NameSearch = () => {
             <form onSubmit={handleSubmit} className="w-full space-x-2 max-w-md flex justify-between items-center mb-4">
                 <Input
                     value={drug_name}
-                    onChange={(e) => set_drug_name(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => set_drug_name(e.target.value)}
                     isClearable
                     type="search"
                     label="Search"

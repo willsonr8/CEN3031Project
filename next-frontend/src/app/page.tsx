@@ -3,7 +3,8 @@ import Link from "next/link";
 import styles from "./home.module.css";
 import HelloMessage from './components/HelloMessage';
 import NameSearch from './components/NameSearch';
-import NavBar from './components/NavBar';
+import NavBar from './components/NavBar1';
+
 
 const HomePage = () => {
     return (
@@ -12,16 +13,6 @@ const HomePage = () => {
             <HelloMessage />
             <NameSearch />
         </div>
-        <div className={styles.container}>
-            <div>Medicate</div>
-            <div className={styles.buttonContainer}>
-                <Link key="createaccount" href="/createaccount">
-                    <div className={styles.button}>Create an Account</div>
-                </Link>
-                <Link key="login" href="/login">
-                    <div className={styles.button}>Login</div>
-                </Link>
-            </div>
     );
 };
 
