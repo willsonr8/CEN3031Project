@@ -4,7 +4,7 @@ import styles from "./home.module.css";
 import HelloMessage from './components/HelloMessage';
 import NameSearch from './components/NameSearch';
 import NavBar from './components/HomePageNavbar';
-import NormalizedNameSearch from "./components/NormalizedNameSearch";
+
 
 
 const HomePage = () => {
