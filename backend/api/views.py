@@ -10,7 +10,6 @@ def get_data(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-    
 def name_search(request):
     try:
         data = json.loads(request.body)
@@ -25,4 +24,21 @@ def name_search(request):
             return JsonResponse({'error': 'No drug name provided'})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def normalized_name_search(request):
+    try:
+        data = json.loads(request.body)
+        drug_name = data.get('name')
+        print("Received drug name:", drug_name)
+
+        if drug_name is not None:
+            search_results = Rx.get_normal_name(drug_name)
+            print(search_results)
+            return JsonResponse(search_results)
+        else:
+            return JsonResponse({'error': 'No drug name provided'})
+    except Exception as e:
+        return JsonResponse({"error in normalized name search function": str(e)}, status=400)
 
