@@ -163,16 +163,27 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]  # Specify the allowed HTTP methods
 
+CORS_ALLOWED_CREDENTIALS = True
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'users.authentication.CustomJWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ]
 }
+
+AUTH_COOKIE = "access"
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24
+AUTH_COOKIE_SECURE = False
+AUTH_COOKIE_HTTP_ONLY = True
+AUTH_COOKIE_PATH = "/"
+AUTH_COOKIE_SAMESITE = "None"
+
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset{uid}/{token}',
