@@ -25,4 +25,3 @@ def name_search(request):
             return JsonResponse({'error': 'No drug name provided'})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
-
