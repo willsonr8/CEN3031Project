@@ -1,0 +1,28 @@
+.table th {
+    background-color: #f40d30; /* Change background color to red */
+    color: white; /* Change text color to white */
+}
+
+/* Rest of the CSS remains the same */
+.table-container {
+    overflow-x: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
