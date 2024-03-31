@@ -20,9 +20,6 @@ const AccountPage: React.FC = () => {
         <div>
             <NavBar />
             <NameSearch />
-            <main>
-                <PrescriptionPage />
-            </main>
         </div>
     );
 };

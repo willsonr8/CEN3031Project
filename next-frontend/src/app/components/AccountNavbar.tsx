@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link } from '@nextui-org/react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from '@nextui-org/react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -15,7 +15,11 @@ const NavBar = () => {
       } catch (error) {
           console.error(error);
       }
-  };
+    };
+
+    const handlePrescriptions = async () => {
+        router.push('/PrescriptionPage');
+    };
 
     return (
         <Navbar isBordered className="red-dark text-foreground bg-background">
@@ -29,13 +33,13 @@ const NavBar = () => {
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Prescriptions
+                    <Link color="foreground" onClick={handlePrescriptions}>
+                        Account
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
                     <Link href="#" aria-current="page">
-                        Account
+                        Settings
                     </Link>
                 </NavbarItem>
             </NavbarContent>
