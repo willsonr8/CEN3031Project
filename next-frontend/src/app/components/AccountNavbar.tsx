@@ -21,6 +21,10 @@ const NavBar = () => {
         router.push('/PrescriptionPage');
     };
 
+    const handleSettings = async () => {
+        router.push('/SettingsPage');
+    };
+
     return (
         <Navbar isBordered className="red-dark text-foreground bg-background">
             <NavbarBrand>
@@ -38,7 +42,7 @@ const NavBar = () => {
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
-                    <Link href="#" aria-current="page">
+                    <Link onClick={handleSettings} aria-current="page">
                         Settings
                     </Link>
                 </NavbarItem>
