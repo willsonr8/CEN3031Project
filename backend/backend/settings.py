@@ -28,12 +28,13 @@ if path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+SECRET_KEY = "django-insecure-tjnh4o2xzqr+6+o&btw4s%4g*v4_1#un9*!p7l8t^(79^95c9b"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG", "False") == "True"
+DEBUG = True
 
-ALLOWED_HOSTS = getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
