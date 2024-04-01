@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
@@ -11,6 +12,18 @@ import "../NameSearch.css";
 const NameSearch = () => {
     let chosen_prescriptions = [];
     const [drug_name, set_drug_name] = useState("");
+=======
+'use client'
+import React, { useState } from 'react';
+import axios from 'axios';
+import {Button} from '@nextui-org/button';
+import {Input} from "@nextui-org/react";
+import {SearchIcon} from "./SearchIcon";
+import '../NameSearch.css';
+
+const NameSearch = () => {
+    const [drug_name, set_drug_name] = useState('');
+>>>>>>> accountPage
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
 
@@ -24,6 +37,7 @@ const NameSearch = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+<<<<<<< HEAD
             const response = await axios.post(
                 "http://localhost:8000/api/name_search/",
                 { name: drug_name }
@@ -32,6 +46,13 @@ const NameSearch = () => {
             setError(false); // Reset error state on successful response
         } catch (error) {
             console.error("Error", error);
+=======
+            const response = await axios.post('http://localhost:8000/api/name_search/', { name: drug_name });
+            setResponseData(response.data);
+            setError(false); // Reset error state on successful response
+        } catch (error) {
+            console.error('Error', error);
+>>>>>>> accountPage
             setError(true); // Set error state to true on error
         }
     };

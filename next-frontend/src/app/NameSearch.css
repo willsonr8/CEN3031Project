@@ -1,5 +1,5 @@
 .table th {
-    background-color: red; /* Change background color to red */
+    background-color: #f40d30; /* Change background color to red */
     color: white; /* Change text color to white */
 }
 
@@ -25,4 +25,8 @@
 .center {
     margin-left: auto;
     margin-right: auto;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> accountPage

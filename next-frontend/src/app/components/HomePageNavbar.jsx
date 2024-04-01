@@ -1,8 +1,21 @@
-import React from "react";
+'use client'
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
 import styles from "../home.module.css";
 
 export default function NavBar() {
+
+  const router = useRouter();
+
+  const handleLogin = async () => {
+    router.push("../login");
+  };
+
+  const handleSignUp = async () => {
+    router.push("../createaccount");
+  };
+
   return (
     <Navbar isBordered  className="red-dark text-foreground bg-background" >
       <NavbarBrand>
@@ -22,10 +35,10 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="../login">Login</Link>
+          <Link onClick={handleLogin}>Login</Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="../createaccount" variant="flat">
+          <Button as={Link} color="primary" onClick={handleSignUp} variant="flat">
             Sign Up
           </Button>
         </NavbarItem>

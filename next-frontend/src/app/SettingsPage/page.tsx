@@ -2,11 +2,10 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import NavBar from '../components/AccountNavbar';
-import NameSearch from '../components/NameSearch';
-import PrescriptionPage from '../components/Prescription';
-import styles from '../home.module.css';
+import DeleteButton from '../components/DeleteButton';
 
-const AccountPage: React.FC = () => {
+
+const SettingsPage: React.FC = () => {
     const router = useRouter();
 
     useEffect(() => {
@@ -16,12 +15,17 @@ const AccountPage: React.FC = () => {
         }
     }, [router]);
 
+    const handleDelete = async () => {
+        
+    };
+
     return (
         <div>
             <NavBar />
-            <PrescriptionPage />
+            <DeleteButton />
+
         </div>
     );
 };
 
-export default AccountPage;
+export default SettingsPage;
