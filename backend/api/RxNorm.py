@@ -23,3 +23,6 @@ class Rx:
         else:
             endpoint = f'/REST/drugs.json?name={value}'
             return cls.make_request(endpoint)
+
+
+

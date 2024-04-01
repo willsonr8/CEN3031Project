@@ -1,7 +1,6 @@
 # Medicate
 CEN3031 Semester Project
 
-Basic search functionality
 
 Backend Setup
 
@@ -25,7 +24,7 @@ Install Dependencies:
 
 	pip install -r requirements.txt
 
-Database Migrations:
+Database Migrations: (if needed)
 
 	python manage.py makemigrations
 
@@ -50,3 +49,5 @@ Install Dependencies:
 Start Server:
 
 	npm run dev
+
+

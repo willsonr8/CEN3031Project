@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import NavBar from '../components/AccountNavbar';
 import NameSearch from '../components/NameSearch';
-import styles from '../home.module.css';
+import NavBar from '../components/AccountNavbar';
+import { useRouter } from 'next/navigation';
 
-const AccountPage: React.FC = () => {
+
+const SearchPage = () => {
     const router = useRouter();
 
     useEffect(() => {
@@ -16,11 +16,11 @@ const AccountPage: React.FC = () => {
     }, [router]);
 
     return (
-        <div>
+        <div style={{ textAlign: 'center', fontSize: '24px' }}>
             <NavBar />
             <NameSearch />
         </div>
     );
 };
 
-export default AccountPage;
+export default SearchPage;

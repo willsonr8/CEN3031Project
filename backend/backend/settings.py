@@ -10,22 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from os import getenv
 from pathlib import Path
+import dotenv
+from django.core.management.utils import get_random_secret_key
+from os import path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+dotenv_file = BASE_DIR / ".env.local"
+if path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tjnh4o2xzqr+6+o&btw4s%4g*v4_1#un9*!p7l8t^(79^95c9b'
+SECRET_KEY = "django-insecure-tjnh4o2xzqr+6+o&btw4s%4g*v4_1#un9*!p7l8t^(79^95c9b"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +49,9 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
+    'djoser',
+    'users',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +96,22 @@ DATABASES = {
     }
 }
 
+# email settings
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+#DEFAULT_FROM_EMAIL = getenv("AWS_SES_FROM_EMAIL")
+
+#AWS_SES_ACCESS_KEY_ID = getenv("AWS_SES_ACCESS_KEY_ID")
+#AWS_SES_SECRET_ACCESS_KEY = getenv("AWS_SES_SECRET_ACCESS_KEY")
+#AWS_SES_REGION_NAME = getenv("AWS_SES_REGION_NAME")
+#AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+#AWS_SES_FROM_EMAIL = getenv("AWS_SES_FROM_EMAIL")
+#USE_SES_V2 = True
+
+DOMAIN = getenv("DOMAIN")
+SITE_NAME = "Medicate"
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -91,9 +119,6 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -120,6 +145,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -136,10 +166,35 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]  # Specify the allowed HTTP methods
 
+CORS_ALLOWED_CREDENTIALS = True
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'users.authentication.CustomJWTAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
     ]
 }
+
+AUTH_COOKIE = "access"
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24
+AUTH_COOKIE_SECURE = False
+AUTH_COOKIE_HTTP_ONLY = True
+AUTH_COOKIE_PATH = "/"
+AUTH_COOKIE_SAMESITE = "None"
+
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+    'ACTIVATION_URL': 'VerifyAccount?uid={uid}&token={token}',
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'TOKEN_MODEL': None,
+
+}
+
+AUTH_USER_MODEL = 'users.UserAccount'
