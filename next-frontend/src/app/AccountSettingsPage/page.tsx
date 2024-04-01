@@ -20,7 +20,7 @@ const SettingsPage: React.FC = () => {
     };
 
     return (
-        <div>
+        <div style={{ textAlign: "center", fontSize: "24px" }}>
             <NavBar />
             <DeleteButton />
 

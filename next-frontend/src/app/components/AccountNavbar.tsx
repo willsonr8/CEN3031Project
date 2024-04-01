@@ -22,7 +22,7 @@ const NavBar = () => {
     };
 
     const handleSettings = async () => {
-        router.push('/SettingsPage');
+        router.push('/AccountSettingsPage');
     };
 
     return (
