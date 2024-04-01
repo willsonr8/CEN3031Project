@@ -38,12 +38,12 @@ const NavBar = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link color="foreground" onClick={handlePrescriptions}>
-                        Account
+                        Prescriptions
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
                     <Link onClick={handleSettings} aria-current="page">
-                        Settings
+                        Account
                     </Link>
                 </NavbarItem>
             </NavbarContent>
