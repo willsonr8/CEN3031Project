@@ -57,7 +57,7 @@ const DeleteAccount: React.FC = (): React.ReactNode => {
                     {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
                     <div className={styles.buttonContainer}>
                         <Link href="/account">
-                            <div className={styles.button}>Back</div>
+                            <div className={styles.button}>Cancel</div>
                         </Link>
                         <button type="submit" className={styles.button}>Comfirm Deletion</button>
                     </div>
