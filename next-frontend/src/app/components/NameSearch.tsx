@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
@@ -12,18 +11,6 @@ import "../NameSearch.css";
 const NameSearch = () => {
     let chosen_prescriptions = [];
     const [drug_name, set_drug_name] = useState("");
-=======
-'use client'
-import React, { useState } from 'react';
-import axios from 'axios';
-import {Button} from '@nextui-org/button';
-import {Input} from "@nextui-org/react";
-import {SearchIcon} from "./SearchIcon";
-import '../NameSearch.css';
-
-const NameSearch = () => {
-    const [drug_name, set_drug_name] = useState('');
->>>>>>> accountPage
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
 
@@ -37,22 +24,11 @@ const NameSearch = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-<<<<<<< HEAD
-            const response = await axios.post(
-                "http://localhost:8000/api/name_search/",
-                { name: drug_name }
-            );
-            setResponseData(response.data);
-            setError(false); // Reset error state on successful response
-        } catch (error) {
-            console.error("Error", error);
-=======
             const response = await axios.post('http://localhost:8000/api/name_search/', { name: drug_name });
             setResponseData(response.data);
             setError(false); // Reset error state on successful response
         } catch (error) {
             console.error('Error', error);
->>>>>>> accountPage
             setError(true); // Set error state to true on error
         }
     };
@@ -60,31 +36,22 @@ const NameSearch = () => {
     const renderTableData = () => {
         if (responseData && responseData.drugGroup) {
             try {
-                return responseData.drugGroup.conceptGroup.map(
-                    (group: { conceptProperties: any[]; tty: string }) => {
-                        if (group.conceptProperties && group.tty === "SBD") {
-                            return group.conceptProperties.map((concept) => {
-                                const { brand, ingredients } =
-                                    parseBrandAndIngredients(concept.name);
-                                return (
-                                    <tr key={concept.rxcui}>
-                                        <td>{brand}</td>
-                                        <td>{ingredients}</td>
-                                        <td className="items-center justify-center">
-                                            <Checkbox
-                                                color="danger"
-                                                radius="md"
-                                            ></Checkbox>
-                                        </td>
-                                    </tr>
-                                );
-                            });
-                        }
-                        return null;
+                return responseData.drugGroup.conceptGroup.map((group: any) => {
+                    if (group.conceptProperties && group.tty === 'SBD') {
+                        return group.conceptProperties.map((concept: any) => {
+                            const { brand, ingredients } = parseBrandAndIngredients(concept.name);
+                            return (
+                                <tr key={concept.rxcui}>
+                                    <td>{brand}</td>
+                                    <td>{ingredients}</td>
+                                </tr>
+                            );
+                        });
                     }
-                );
+                    return null;
+                });
             } catch (error) {
-                console.error("No drug found", error);
+                console.error('No drug found', error);
             }
         }
         return null;
@@ -142,7 +109,6 @@ const NameSearch = () => {
                                     <tr>
                                         <th>Brand</th>
                                         <th>Ingredients</th>
-                                        <th>Add</th>
                                     </tr>
                                 </thead>
                                 <tbody>{renderTableData()}</tbody>
