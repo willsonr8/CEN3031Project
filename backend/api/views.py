@@ -3,6 +3,11 @@ from django.views.decorators.csrf import csrf_exempt
 from .RxNorm import Rx
 from django.views.decorators.http import require_http_methods
 import json
+from rest_framework import permissions, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from .models import SearchHistory
+from .serializers import SearchHistorySerializer
 
 def get_data(request):
     message = {'text': 'Hello from Django!'}
@@ -25,3 +30,31 @@ def name_search(request):
             return JsonResponse({'error': 'No drug name provided'})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+    
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def save_search(request):
+    query = request.data.get('query')
+    if not query:
+        return Response({'error': 'No query provided'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    existing_query = SearchHistory.objects.filter(user=request.user, query=query).first()
+    
+    if existing_query:
+        existing_query.created_at = now()
+        existing_query.save()
+    else:
+        SearchHistory.objects.create(user=request.user, query=query)
+        
+        if SearchHistory.objects.filter(user=request.user).count() > 10:
+            oldest_entry = SearchHistory.objects.filter(user=request.user).order_by('created_at').first()
+            oldest_entry.delete()
+
+    return Response({'status': 'Search saved/updated'}, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_search_history(request):
+    history = SearchHistory.objects.filter(user=request.user).order_by('-created_at')
+    serializer = SearchHistorySerializer(history, many=True)
+    return Response(serializer.data)
