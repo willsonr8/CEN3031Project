@@ -157,6 +157,7 @@ AUTHENTICATION_BACKENDS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -166,7 +167,9 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]  # Specify the allowed HTTP methods
 
-CORS_ALLOWED_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['authorization', 'content-type', 'x-csrftoken']
+
+
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

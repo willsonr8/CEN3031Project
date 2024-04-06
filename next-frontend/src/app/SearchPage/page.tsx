@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react';
-import NameSearch from '../components/NameSearch';
+import NameSearch from '../components/NameSearchAccount';
 import NavBar from '../components/AccountNavbar';
 import { useRouter } from 'next/navigation';
 
