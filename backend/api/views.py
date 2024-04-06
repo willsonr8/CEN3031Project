@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import SearchHistory
 from .serializers import SearchHistorySerializer
+from django.utils.timezone import now
 
 def get_data(request):
     message = {'text': 'Hello from Django!'}
