@@ -13,6 +13,7 @@ const NameSearch = () => {
     const [drug_name, set_drug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,6 +26,68 @@ const NameSearch = () => {
             setError(true); // Set error state to true on error
         }
     };
+
+    const sortByBrandName = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.brandName.localeCompare(b.rxtermsProperties.brandName);
+            } else {
+                return b.rxtermsProperties.brandName.localeCompare(a.rxtermsProperties.brandName);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByDisplayName = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.displayName.localeCompare(b.rxtermsProperties.displayName);
+            } else {
+                return b.rxtermsProperties.displayName.localeCompare(a.rxtermsProperties.displayName);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByStrength = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.strength.localeCompare(b.rxtermsProperties.strength);
+            } else {
+                return b.rxtermsProperties.strength.localeCompare(a.rxtermsProperties.strength);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByDoseForm = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.rxtermsDoseForm.localeCompare(b.rxtermsProperties.rxtermsDoseForm);
+            } else {
+                return b.rxtermsProperties.rxtermsDoseForm.localeCompare(a.rxtermsProperties.rxtermsDoseForm);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByRoute = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.route.localeCompare(b.rxtermsProperties.route);
+            } else {
+                return b.rxtermsProperties.route.localeCompare(a.rxtermsProperties.route);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+
 
     const renderTableData = () => {
         if (responseData && responseData["all drugs"]) {
@@ -79,7 +142,7 @@ const NameSearch = () => {
                 </div>
             ) : null}
             {responseData &&
-            responseData['all drugs'].length == 0 &&
+            responseData['all drugs'].length === 0 &&
             !error ? (
                 <div className="text-red-500">
                     No drugs found, please try again.
@@ -93,11 +156,11 @@ const NameSearch = () => {
                             <table className="center table">
                                 <thead>
                                 <tr>
-                                    <th>Brand</th>
-                                    <th>Display Name</th>
-                                    <th>Strength</th>
-                                    <th>Dose Form</th>
-                                    <th>Route</th>
+                                    <th onClick={sortByBrandName}>Brand</th>
+                                    <th onClick={sortByDisplayName}>Display Name</th>
+                                    <th onClick={sortByStrength}>Strength</th>
+                                    <th onClick={sortByDoseForm}>Dose Form</th>
+                                    <th onClick={sortByRoute}>Route</th>
                                 </tr>
                                 </thead>
                                 <tbody>{renderTableData()}</tbody>
