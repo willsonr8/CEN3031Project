@@ -14,13 +14,6 @@ const NameSearch = () => {
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
 
-    const parseBrandAndIngredients = (name: string) => {
-        const brandMatch = name.match(/\[(.*?)\]/); // Matches text within brackets
-        const brand = brandMatch ? brandMatch[1] : "Generic";
-        const ingredients = brandMatch ? name.replace(brandMatch[0], "") : name;
-        return { brand, ingredients };
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -34,22 +27,17 @@ const NameSearch = () => {
     };
 
     const renderTableData = () => {
-        if (responseData && responseData.drugGroup) {
+        if (responseData && responseData["all drugs"]) {
             try {
-                return responseData.drugGroup.conceptGroup.map((group: any) => {
-                    if (group.conceptProperties && group.tty === 'SBD') {
-                        return group.conceptProperties.map((concept: any) => {
-                            const { brand, ingredients } = parseBrandAndIngredients(concept.name);
-                            return (
-                                <tr key={concept.rxcui}>
-                                    <td>{brand}</td>
-                                    <td>{ingredients}</td>
-                                </tr>
-                            );
-                        });
-                    }
-                    return null;
-                });
+                return responseData['all drugs'].map((drug: any, index: number) => (
+                    <tr key={index}>
+                        <td>{drug.rxtermsProperties.brandName}</td>
+                        <td className="display-name">{drug.rxtermsProperties.displayName}</td>
+                        <td>{drug.rxtermsProperties.strength}</td>
+                        <td>{drug.rxtermsProperties.rxtermsDoseForm}</td>
+                        <td>{drug.rxtermsProperties.route}</td>
+                    </tr>
+                ));
             } catch (error) {
                 console.error('No drug found', error);
             }
@@ -91,25 +79,26 @@ const NameSearch = () => {
                 </div>
             ) : null}
             {responseData &&
-            responseData.drugGroup &&
-            !responseData.drugGroup.conceptGroup &&
+            responseData['all drugs'].length == 0 &&
             !error ? (
                 <div className="text-red-500">
                     No drugs found, please try again.
                 </div>
             ) : null}
             {responseData &&
-                responseData.drugGroup &&
-                responseData.drugGroup.conceptGroup &&
+                responseData['all drugs'] &&
                 !error && (
                     <div className="w-full max-w-2xl text-white">
                         <div className="table-container">
                             <table className="center table">
                                 <thead>
-                                    <tr>
-                                        <th>Brand</th>
-                                        <th>Ingredients</th>
-                                    </tr>
+                                <tr>
+                                    <th>Brand</th>
+                                    <th>Display Name</th>
+                                    <th>Strength</th>
+                                    <th>Dose Form</th>
+                                    <th>Route</th>
+                                </tr>
                                 </thead>
                                 <tbody>{renderTableData()}</tbody>
                             </table>
@@ -121,3 +110,4 @@ const NameSearch = () => {
 };
 
 export default NameSearch;
+
