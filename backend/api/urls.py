@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/name_search/', views.name_search, name='name_search'),
     path('api/save_search/', views.save_search, name='save_search'),
     path('api/search_history/', views.get_search_history, name='get_search_history'),
+    path('api/prescriptions/', views.PrescriptionListCreateView.as_view(), name='prescriptions'),
 ]
