@@ -9,6 +9,8 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 10px;
+    width: 100%; /* Set width to 100% */
+    max-width: 1200px; /* Set a maximum width to avoid it becoming too wide */
 }
 
 .table {
@@ -20,9 +22,16 @@
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+    font-size: 14px;
 }
 
 .center {
     margin-left: auto;
     margin-right: auto;
+}
+
+.table td.display-name {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 150px;
 }
