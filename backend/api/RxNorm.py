@@ -24,5 +24,13 @@ class Rx:
             endpoint = f'/REST/drugs.json?name={value}'
             return cls.make_request(endpoint)
 
+    @classmethod
+    def get_rx_properties(cls, id):
+        if id is None:
+            return {"error": "possible generic drug"}
+        else:
+            endpoint = f'/REST/RxTerms/rxcui/{id}/allinfo.json'
+            return cls.make_request(endpoint)
+
 
 

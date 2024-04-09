@@ -13,13 +13,7 @@ const NameSearch = () => {
     const [drug_name, set_drug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
-
-    const parseBrandAndIngredients = (name: string) => {
-        const brandMatch = name.match(/\[(.*?)\]/); // Matches text within brackets
-        const brand = brandMatch ? brandMatch[1] : "Generic";
-        const ingredients = brandMatch ? name.replace(brandMatch[0], "") : name;
-        return { brand, ingredients };
-    };
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,23 +27,80 @@ const NameSearch = () => {
         }
     };
 
+    const sortByBrandName = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.brandName.localeCompare(b.rxtermsProperties.brandName);
+            } else {
+                return b.rxtermsProperties.brandName.localeCompare(a.rxtermsProperties.brandName);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByDisplayName = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.displayName.localeCompare(b.rxtermsProperties.displayName);
+            } else {
+                return b.rxtermsProperties.displayName.localeCompare(a.rxtermsProperties.displayName);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByStrength = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.strength.localeCompare(b.rxtermsProperties.strength);
+            } else {
+                return b.rxtermsProperties.strength.localeCompare(a.rxtermsProperties.strength);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByDoseForm = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.rxtermsDoseForm.localeCompare(b.rxtermsProperties.rxtermsDoseForm);
+            } else {
+                return b.rxtermsProperties.rxtermsDoseForm.localeCompare(a.rxtermsProperties.rxtermsDoseForm);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByRoute = () => {
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.route.localeCompare(b.rxtermsProperties.route);
+            } else {
+                return b.rxtermsProperties.route.localeCompare(a.rxtermsProperties.route);
+            }
+        });
+        setResponseData({ 'all drugs': sorted });
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+
+
     const renderTableData = () => {
-        if (responseData && responseData.drugGroup) {
+        if (responseData && responseData["all drugs"]) {
             try {
-                return responseData.drugGroup.conceptGroup.map((group: any) => {
-                    if (group.conceptProperties && group.tty === 'SBD') {
-                        return group.conceptProperties.map((concept: any) => {
-                            const { brand, ingredients } = parseBrandAndIngredients(concept.name);
-                            return (
-                                <tr key={concept.rxcui}>
-                                    <td>{brand}</td>
-                                    <td>{ingredients}</td>
-                                </tr>
-                            );
-                        });
-                    }
-                    return null;
-                });
+                return responseData['all drugs'].map((drug: any, index: number) => (
+                    <tr key={index}>
+                        <td>{drug.rxtermsProperties.brandName}</td>
+                        <td className="display-name">{drug.rxtermsProperties.displayName}</td>
+                        <td>{drug.rxtermsProperties.strength}</td>
+                        <td>{drug.rxtermsProperties.rxtermsDoseForm}</td>
+                        <td>{drug.rxtermsProperties.route}</td>
+                    </tr>
+                ));
             } catch (error) {
                 console.error('No drug found', error);
             }
@@ -91,25 +142,26 @@ const NameSearch = () => {
                 </div>
             ) : null}
             {responseData &&
-            responseData.drugGroup &&
-            !responseData.drugGroup.conceptGroup &&
+            responseData['all drugs'].length === 0 &&
             !error ? (
                 <div className="text-red-500">
                     No drugs found, please try again.
                 </div>
             ) : null}
             {responseData &&
-                responseData.drugGroup &&
-                responseData.drugGroup.conceptGroup &&
+                responseData['all drugs'] &&
                 !error && (
                     <div className="w-full max-w-2xl text-white">
                         <div className="table-container">
                             <table className="center table">
                                 <thead>
-                                    <tr>
-                                        <th>Brand</th>
-                                        <th>Ingredients</th>
-                                    </tr>
+                                <tr>
+                                    <th onClick={sortByBrandName}>Brand</th>
+                                    <th onClick={sortByDisplayName}>Display Name</th>
+                                    <th onClick={sortByStrength}>Strength</th>
+                                    <th onClick={sortByDoseForm}>Dose Form</th>
+                                    <th onClick={sortByRoute}>Route</th>
+                                </tr>
                                 </thead>
                                 <tbody>{renderTableData()}</tbody>
                             </table>
@@ -121,3 +173,4 @@ const NameSearch = () => {
 };
 
 export default NameSearch;
+
