@@ -4,6 +4,7 @@ from .models import SearchHistory
 
 admin.site.register(Message)
 
+# Register the SearchHistory model with the admin site
 class SearchHistoryAdmin(admin.ModelAdmin):
     list_display = ('user', 'query', 'created_at')
     list_filter = ('user', 'created_at')

@@ -31,22 +31,27 @@ def name_search(request):
             return JsonResponse({'error': 'No drug name provided'})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
-    
+
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
+# function to save the search history
 def save_search(request):
+    # get the query from the request data
     query = request.data.get('query')
     if not query:
         return Response({'error': 'No query provided'}, status=status.HTTP_400_BAD_REQUEST)
     
+    # check if the query already exists in the search history
     existing_query = SearchHistory.objects.filter(user=request.user, query=query).first()
-    
     if existing_query:
         existing_query.created_at = now()
         existing_query.save()
     else:
+        # create a new entry in the search history if the query does not exist
         SearchHistory.objects.create(user=request.user, query=query)
         
+        # if the number of entries in the search history exceeds 10, delete the oldest entry
         if SearchHistory.objects.filter(user=request.user).count() > 10:
             oldest_entry = SearchHistory.objects.filter(user=request.user).order_by('created_at').first()
             oldest_entry.delete()
@@ -55,7 +60,11 @@ def save_search(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+
+# function to get the search history
 def get_search_history(request):
+
+    # get the search history entries for the current user
     history = SearchHistory.objects.filter(user=request.user).order_by('-created_at')
     serializer = SearchHistorySerializer(history, many=True)
     return Response(serializer.data)
