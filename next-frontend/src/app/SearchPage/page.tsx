@@ -3,18 +3,11 @@ import React, { useEffect } from 'react';
 import NameSearch from '../components/NameSearchAccount';
 import NavBar from '../components/AccountNavbar';
 import { useRouter } from 'next/navigation';
+import CheckTokenExpiration from '../components/TokenExpirationCheck';
 
 
 const SearchPage = () => {
-    const router = useRouter();
-
-    useEffect(() => {
-        const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='));
-        if (!accessToken) {
-            router.push('/login');
-        }
-    }, [router]);
-
+    CheckTokenExpiration();
     return (
         <div style={{ textAlign: 'center', fontSize: '24px' }}>
             <NavBar />
