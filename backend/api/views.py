@@ -63,7 +63,7 @@ def get_search_history(request):
     history = SearchHistory.objects.filter(user=request.user).order_by('-created_at')
     serializer = SearchHistorySerializer(history, many=True)
     return Response(serializer.data)
-=======
+
 def manage_results(drug_list):
     for drug in drug_list:
         corrected_name = ""
