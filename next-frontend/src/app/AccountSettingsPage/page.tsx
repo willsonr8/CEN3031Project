@@ -3,22 +3,12 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import NavBar from '../components/AccountNavbar';
 import DeleteButton from '../components/DeleteButton';
+import CheckTokenExpiration from '../components/TokenExpirationCheck';
 
 
 const SettingsPage: React.FC = () => {
-    const router = useRouter();
 
-    useEffect(() => {
-        const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='));
-        if (!accessToken) {
-            router.push('/login');
-        }
-    }, [router]);
-
-    const handleDelete = async () => {
-        
-    };
-
+    CheckTokenExpiration();
     return (
         <div style={{ textAlign: "center", fontSize: "24px" }}>
             <NavBar />
