@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import SearchHistory
 from .models import Prescription
 
+# SearchHistory serializer
 class SearchHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchHistory
