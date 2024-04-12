@@ -10,7 +10,7 @@ const CreateAccountPage: React.FC = () => {
     const [dateOfBirth, setDateOfBirth] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [consent, setConsent] = useState(false); // State to manage consent checkbox
+    const [consent, setConsent] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
