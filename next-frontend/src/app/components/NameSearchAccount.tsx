@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/react";
+import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
 
 import "../NameSearch.css";
@@ -10,29 +11,20 @@ import "../NameSearch.css";
 const NameSearch = () => {
     const [drug_name, set_drug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
-    const [error, setError] = useState<boolean>(false);
-    const [searchHistory, setSearchHistory] = useState<string[]>([]);
-
-    const parseBrandAndIngredients = (name: string) => {
-        const brandMatch = name.match(/\[(.*?)\]/); // Matches text within brackets
-        const brand = brandMatch ? brandMatch[1] : "Generic";
-        const ingredients = brandMatch ? name.replace(brandMatch[0], "") : name;
-        return { brand, ingredients };
-    };
+    const [error, setError] = useState(false);
+    const [searchHistory, setSearchHistory] = useState([]);
+    const [sortOrder, setSortOrder] = useState('asc');
 
     useEffect(() => {
         fetchSearchHistory();
-      }, []);
-    
+    }, []);
+
     const fetchSearchHistory = async () => {
-        
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
-    
         if (!accessToken) {
             console.error('Access token not found.');
             return;
         }
-    
         try {
             const response = await axios.get('http://localhost:8000/api/search_history/', {
                 headers: { Authorization: `Bearer ${accessToken}` },
@@ -44,7 +36,24 @@ const NameSearch = () => {
             setError(true);
         }
     };
-    
+
+    const saveSearchHistory = async (query: string) => {
+        const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
+        if (!accessToken) {
+            console.error('Access token not found.');
+            return;
+        }
+        try {
+            await axios.post('http://localhost:8000/api/save_search/', { query }, {
+                headers: { Authorization: `Bearer ${accessToken}` },
+                withCredentials: true,
+            });
+            fetchSearchHistory();
+        } catch (error) {
+            console.error('Error saving search query to history:', error);
+        }
+    };
+
     const performSearch = async (query: string) => {
         try {
             const response = await axios.post('http://localhost:8000/api/name_search/', { name: query });
@@ -55,50 +64,109 @@ const NameSearch = () => {
             setError(true);
             return;
         }
-      
-        const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
-      
-        if (accessToken) {
-            try {
-                await axios.post('http://localhost:8000/api/save_search/', { query }, {
-                headers: { Authorization: `Bearer ${accessToken}` },
-                withCredentials: true,
-            });
-            fetchSearchHistory();
-            } catch (saveError) {
-                console.error('Error saving search query to history:', saveError);
-            }
+    };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8000/api/name_search/', { name: drug_name });
+            setResponseData(response.data);
+            setError(false);
+            saveSearchHistory(drug_name);
+        } catch (error) {
+            console.error('Error', error);
+            setError(true);
         }
     };
-    
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        performSearch(drug_name);
+
+
+
+    const sortByBrandName = () => {
+        if (responseData === null) {
+            return;
+        }
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.brandName.localeCompare(b.rxtermsProperties.brandName);
+            } else {
+                return b.rxtermsProperties.brandName.localeCompare(a.rxtermsProperties.brandName);
+            }
+        });
+        setResponseData({ 'all drugs': sorted } as any); // Fix: Update type of responseData and initialize as empty array
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
-    
-    const handleSearchHistoryClick = (query: string) => {
-        set_drug_name(query);
-        performSearch(query);
+
+    const sortByDisplayName = () => {
+        if (responseData === null) {
+            return;
+        }
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.displayName.localeCompare(b.rxtermsProperties.displayName);
+            } else {
+                return b.rxtermsProperties.displayName.localeCompare(a.rxtermsProperties.displayName);
+            }
+        });
+        setResponseData({ 'all drugs': sorted } as any); // Fix: Update type of responseData and initialize as empty array
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
-    
+
+    const sortByStrength = () => {
+        if (responseData === null) {
+            return;
+        }
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.strength.localeCompare(b.rxtermsProperties.strength);
+            } else {
+                return b.rxtermsProperties.strength.localeCompare(a.rxtermsProperties.strength);
+            }
+        });
+        setResponseData({ 'all drugs': sorted } as any); // Fix: Update type of responseData and initialize as empty array
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByDoseForm = () => {
+        if (responseData === null) {
+            return;
+        }
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.rxtermsDoseForm.localeCompare(b.rxtermsProperties.rxtermsDoseForm);
+            } else {
+                return b.rxtermsProperties.rxtermsDoseForm.localeCompare(a.rxtermsProperties.rxtermsDoseForm);
+            }
+        });
+        setResponseData({ 'all drugs': sorted } as any); // Fix: Update type of responseData and initialize as empty array
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
+    const sortByRoute = () => {
+        if (responseData === null) {
+            return;
+        }
+        const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
+            if (sortOrder === 'asc') {
+                return a.rxtermsProperties.route.localeCompare(b.rxtermsProperties.route);
+            } else {
+                return b.rxtermsProperties.route.localeCompare(a.rxtermsProperties.route);
+            }
+        });
+        setResponseData({ 'all drugs': sorted } as any); // Fix: Update type of responseData and initialize as empty array
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
 
     const renderTableData = () => {
-        if (responseData && responseData.drugGroup) {
+        if (responseData && responseData["all drugs"]) {
             try {
-                return responseData.drugGroup.conceptGroup.map((group: any) => {
-                    if (group.conceptProperties && group.tty === 'SBD') {
-                        return group.conceptProperties.map((concept: any) => {
-                            const { brand, ingredients } = parseBrandAndIngredients(concept.name);
-                            return (
-                                <tr key={concept.rxcui}>
-                                    <td>{brand}</td>
-                                    <td>{ingredients}</td>
-                                </tr>
-                            );
-                        });
-                    }
-                    return null;
-                });
+                return (responseData['all drugs'] as any[]).map((drug: any, index: number) => (
+                    <tr key={index}>
+                        <td>{drug.rxtermsProperties.brandName}</td>
+                        <td className="display-name">{drug.rxtermsProperties.displayName}</td>
+                        <td>{drug.rxtermsProperties.strength}</td>
+                        <td>{drug.rxtermsProperties.rxtermsDoseForm}</td>
+                        <td>{drug.rxtermsProperties.route}</td>
+                    </tr>
+                ));
             } catch (error) {
                 console.error('No drug found', error);
             }
@@ -106,12 +174,10 @@ const NameSearch = () => {
         return null;
     };
 
+
     return (
         <div className="flex flex-col items-center w-full">
-            <form
-                onSubmit={handleSubmit}
-                className="py-2 w-full space-x-2 max-w-md flex justify-between items-center mb-4"
-            >
+            <form onSubmit={handleSubmit} className="py-2 w-full space-x-2 max-w-md flex justify-between items-center mb-4">
                 <Input
                     value={drug_name}
                     onChange={(e) => set_drug_name(e.target.value)}
@@ -119,26 +185,17 @@ const NameSearch = () => {
                     size="lg"
                     radius="full"
                     placeholder="Type medication name..."
-                    startContent={
-                        <SearchIcon className="rounded-s-lg font-2 text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-                    }
+                    startContent={<SearchIcon className="rounded-s-lg font-2 text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />}
                 />
-                <Button
-                    className="red-dark"
-                    radius="full"
-                    size="lg"
-                    type="submit"
-                    color="primary"
-                    variant="solid"
-                >
+                <Button className="red-dark" radius="full" size="lg" type="submit" color="primary" variant="solid">
                     Search
                 </Button>
             </form>
             <div>
                 {searchHistory.map((query, index) => (
-                <Button key={index} style={{margin: '0 8px 8px 0' }} color="default" onClick={() => handleSearchHistoryClick(query)}>
-                    {query}
-                </Button>
+                    <Button key={index} style={{margin: '0 8px 8px 0'}} color="default" onClick={() => performSearch(query)}>
+                        {query}
+                    </Button>
                 ))}
             </div>
             {error ? (
@@ -147,25 +204,26 @@ const NameSearch = () => {
                 </div>
             ) : null}
             {responseData &&
-            responseData.drugGroup &&
-            !responseData.drugGroup.conceptGroup &&
+            responseData['all drugs'].length === 0 &&
             !error ? (
                 <div className="text-red-500">
                     No drugs found, please try again.
                 </div>
             ) : null}
             {responseData &&
-                responseData.drugGroup &&
-                responseData.drugGroup.conceptGroup &&
+                responseData['all drugs'] &&
                 !error && (
                     <div className="w-full max-w-2xl text-white">
                         <div className="table-container">
                             <table className="center table">
                                 <thead>
-                                    <tr>
-                                        <th>Brand</th>
-                                        <th>Ingredients</th>
-                                    </tr>
+                                <tr>
+                                    <th onClick={sortByBrandName}>Brand</th>
+                                    <th onClick={sortByDisplayName}>Display Name</th>
+                                    <th onClick={sortByStrength}>Strength</th>
+                                    <th onClick={sortByDoseForm}>Dose Form</th>
+                                    <th onClick={sortByRoute}>Route</th>
+                                </tr>
                                 </thead>
                                 <tbody>{renderTableData()}</tbody>
                             </table>
