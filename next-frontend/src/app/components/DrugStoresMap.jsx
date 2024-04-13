@@ -2,16 +2,24 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 
 const DrugStoresMap =({ googleApiKey })=> {
-    let map;
+    let map, infoWindow;
+
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation.",
+        );
+        infoWindow.open(map);
+    }
 
     async function initMap() {
         if (typeof google === 'undefined') {
             console.error('Google Maps API not loaded');
             return;
         }
-        // The location of Uluru
         const position = {lat: 39.8283, lng: -98.5795};
-        // Request needed libraries.
         //@ts-ignore
         const {Map} = await google.maps.importLibrary("maps");
         const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
@@ -20,15 +28,46 @@ const DrugStoresMap =({ googleApiKey })=> {
         map = new Map(document.getElementById("map"), {
             zoom: 4,
             center: position,
-            mapId: "DEMO_MAP_ID",
+            mapId: "USA",
+        });
+        infoWindow = new google.maps.InfoWindow();
+
+        const locationButton = document.createElement("button");
+
+        locationButton.textContent = "Stores Near Me";
+        locationButton.classList.add("custom-map-control-button");
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+        locationButton.addEventListener("click", () => {
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+
+                        infoWindow.setPosition(pos);
+                        infoWindow.setContent("Location found.");
+                        infoWindow.open(map);
+                        map.setCenter(pos);
+                    },
+                    () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    },
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
         });
 
-        // The marker, positioned at Uluru
-        const marker = new AdvancedMarkerElement({
-            map: map,
-            position: position,
-            title: "Uluru",
-        });
+
+        // const marker = new AdvancedMarkerElement({
+        //     map: map,
+        //     position: position,
+        //     title: "User Location",
+        // });
     }
     useEffect(() => {
         const script = document.createElement('script');
@@ -45,11 +84,28 @@ const DrugStoresMap =({ googleApiKey })=> {
     return (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
             <Head>
-                <title>Add Map</title>
+                <title>Geolocation</title>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-                <link rel="stylesheet" type="text/css" href="/style.css"/>
+                <link rel="stylesheet" type="text/css" href="./DrugStoresMapStyle.css"/>
             </Head>
             <div id="map" style={{width: '600px', height: '400px'}}></div>
+            <style>
+                {'.custom-map-control-button {\n' +
+                    '  background-color: #fff;\n' +
+                    '  border: 0;\n' +
+                    '  border-radius: 2px;\n' +
+                    '  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);\n' +
+                    '  margin: 10px;\n' +
+                    '  padding: 0 0.5em;\n' +
+                    '  font: 400 18px Roboto, Arial, sans-serif;\n' +
+                    '  overflow: hidden;\n' +
+                    '  height: 40px;\n' +
+                    '  cursor: pointer;\n' +
+                    '}\n' +
+                    '.custom-map-control-button:hover {\n' +
+                    '  background: rgb(235, 235, 235);\n' +
+                    '}'}
+            </style>
         </div>
     );
 }
