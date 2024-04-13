@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 
-const DrugStoresMap =()=> {
+const DrugStoresMap =({ googleApiKey })=> {
     let map;
 
     async function initMap() {
@@ -32,7 +32,7 @@ const DrugStoresMap =()=> {
     }
     useEffect(() => {
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDAdVRfH22Ugx66WooxJCFaNAB8tj3wVdI&libraries=places&callback=initMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places&callback=initMap`;
         script.async = true;
         script.defer = true;
         script.onload = initMap;
@@ -41,7 +41,7 @@ const DrugStoresMap =()=> {
         return () => {
             document.head.removeChild(script);
         };
-    }, []);
+    }, [googleApiKey]);
     return (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
             <Head>

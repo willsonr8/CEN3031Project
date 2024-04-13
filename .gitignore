@@ -1,5 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
+next-frontend/.env
 
 ### Django ###
 *.log
@@ -133,7 +134,7 @@ celerybeat.pid
 
 # Environments
 .env.local
-.env
+next-frontend/.env
 .venv
 env/
 venv/

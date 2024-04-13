@@ -17,6 +17,7 @@ const NameSearch = () => {
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -111,6 +112,7 @@ const NameSearch = () => {
         return null;
     };
 
+
     return (
         <div className="flex flex-col items-center w-full">
             <form
@@ -180,7 +182,7 @@ const NameSearch = () => {
             )}
             {selected === 'map' && (
                 <div>
-                    <DrugStoresMap />
+                    <DrugStoresMap googleApiKey={googleApiKey} />
                 </div>
             )}
         </div>
