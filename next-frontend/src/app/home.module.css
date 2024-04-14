@@ -88,7 +88,7 @@
     cursor: pointer;
 }
 
-.inputCheckbox a {
+.inputCheckbox {
     font-size: 16px;
     color: blue;
     text-decoration: underline;

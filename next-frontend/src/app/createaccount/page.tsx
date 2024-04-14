@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {Checkbox} from "@nextui-org/react";
 import axios from "axios";
 import styles from "../home.module.css";
 
@@ -72,20 +73,18 @@ const CreateAccountPage: React.FC = () => {
                         <Image src="/icons/password.png" width= {19} height={22} alt="password" />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
+
                     <div className={styles.inputCheckbox}>
-                    <input
-                        type="checkbox"
-                        id="dataConsentCheckbox"
-                        checked={consent}
-                        onChange={(e) => setConsent(e.target.checked)}
-                    />
+                    <Checkbox isSelected={consent} onValueChange={setConsent}>
+                        I consent the collection of personal data.
+                    </Checkbox>
+                    </div>
                     <label htmlFor="dataConsentCheckbox">
-                    I consent the collection of personal data.
                     <Link href="/ConsentPage">
                         <div className="ml-1 underline">Read more</div>
                     </Link>
                     </label>
-                    </div>
+   
                     {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
                     <div className={styles.buttonContainer}>
                         <Link href="/">
