@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 
 const DrugStoresMap =({ googleApiKey })=> {
-    let map, infoWindow;
+    let map, service, infoWindow;
+    let userDraggedMap = false;
+    let markers = [];
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
@@ -19,18 +21,65 @@ const DrugStoresMap =({ googleApiKey })=> {
             console.error('Google Maps API not loaded');
             return;
         }
-        const position = {lat: 39.8283, lng: -98.5795};
         //@ts-ignore
-        const {Map} = await google.maps.importLibrary("maps");
-        const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
+        const { Map } = await google.maps.importLibrary("maps");
+        const {AdvancedMarkerElement, PinElement} = await google.maps.importLibrary("marker");
 
-        // The map, centered at Uluru
         map = new Map(document.getElementById("map"), {
             zoom: 4,
-            center: position,
+            center: {lat: 39.8283, lng: -98.5795},
             mapId: "USA",
         });
+
+        service = new google.maps.places.PlacesService(map);
         infoWindow = new google.maps.InfoWindow();
+
+        function performSearch() {
+            const request = {
+                query: "Drug Store",
+                fields: ["name", "geometry"],
+                bounds: map.getBounds(),
+            };
+
+            service.textSearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                    // Clear existing markers
+                    markers.forEach(marker => marker.setMap(null));
+                    markers = [];
+
+                    // Fit bounds to display all markers
+                    const bounds = new google.maps.LatLngBounds();
+                    results.forEach((place) => {
+                        const marker = new google.maps.Marker({
+                            map: map,
+                            position: place.geometry.location,
+                        });
+                        markers.push(marker);
+                        if (place.geometry.viewport) {
+                            bounds.union(place.geometry.viewport);
+                        } else {
+                            bounds.union(place.geometry.location);
+                        }
+                    });
+                    setTimeout(() => {
+                        const bounds = new google.maps.LatLngBounds();
+                        markers.forEach((marker) => bounds.extend(marker.getPosition()));
+                        map.fitBounds(bounds);
+                    }, 500);
+                }
+            });
+        }
+
+        map.addListener("dragstart", () => {
+            userDraggedMap = true;
+        });
+        map.addListener("idle", () => {
+            if (userDraggedMap) {
+                performSearch();
+                userDraggedMap = false;
+            }
+        })
+
 
         const locationButton = document.createElement("button");
 
@@ -48,27 +97,28 @@ const DrugStoresMap =({ googleApiKey })=> {
                         };
 
                         infoWindow.setPosition(pos);
-                        infoWindow.setContent("Location found.");
+                        infoWindow.setContent("Current Location");
                         infoWindow.open(map);
                         map.setCenter(pos);
+                        map.setZoom(13)
+                        //const pinBackground = new PinElement({background: "#FBBC04"})
+                        // const userLocationMarker = new google.maps.marker.AdvancedMarkerElement({
+                        //     map: map,
+                        //     position: pos,
+                        //     content: pinBackground.element,
+                        //     title: "Current Location",
+                        // })
+                        // markers.push(userLocationMarker)
                     },
                     () => {
                         handleLocationError(true, infoWindow, map.getCenter());
-                    },
-                );
+                    })
             } else {
-                // Browser doesn't support Geolocation
                 handleLocationError(false, infoWindow, map.getCenter());
             }
         });
-
-
-        // const marker = new AdvancedMarkerElement({
-        //     map: map,
-        //     position: position,
-        //     title: "User Location",
-        // });
     }
+
     useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places&callback=initMap`;
