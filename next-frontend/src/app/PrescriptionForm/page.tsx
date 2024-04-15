@@ -77,7 +77,7 @@ const PrescriptionForm: React.FC = () => {
         router.push('/PrescriptionPage');
     };
 
-    
+    const today = new Date().toISOString().split('T')[0];
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>
@@ -86,7 +86,7 @@ const PrescriptionForm: React.FC = () => {
                 <form className={styles.inputs} onSubmit={handlePrescription}>
                     <div className={styles.input}>
                         <Image src="/icons/rx.png" width={20} height={21} alt="user" />
-                        <input type="text" placeholder="RXID" value={rxid} onChange={(e) => setRxid(e.target.value)} />
+                        <input type="text" pattern="\d*" title="RXID" placeholder="RXID" value={rxid} onChange={(e) => setRxid(e.target.value)} />
 
                     </div>
                     <div className={styles.input}>
@@ -96,12 +96,12 @@ const PrescriptionForm: React.FC = () => {
                     </div>
                     <div className={styles.input}>
                         <Image src="/icons/dose.png" width={20} height={21} alt="user" />
-                        <input type="text" placeholder="Dosage" value={dosage} onChange={(e) => setDosage(e.target.value)} />
+                        <input type="text" pattern="^\d+(\.\d+)?$" title="Dosage must be a number." placeholder="Dosage" value={dosage} onChange={(e) => setDosage(e.target.value)} />
                     </div>
                     <div>Expiration date</div>
                     <div className={styles.input}>
                         <Image src="/icons/calendar.png" width={20} height={21} alt="user" />
-                        <input type="date" placeholder="Expiration Date" value={expiration_date} onChange={(e) => setExpiration_date(e.target.value)} />
+                        <input type="date" min={today} title="Expiration date" placeholder="Expiration Date" value={expiration_date} onChange={(e) => setExpiration_date(e.target.value)} />
                     </div>
                     <div className={styles.input}>
                         <Image src="/icons/pharmacy.png" width={20} height={21} alt="user" />
