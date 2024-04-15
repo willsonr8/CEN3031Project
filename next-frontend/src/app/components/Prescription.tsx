@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../prescriptions.module.css';
 import { Button } from '@nextui-org/react';
+import { CircularProgress } from "@nextui-org/react";
 
 interface Prescription {
   rxid: number;
@@ -27,6 +28,7 @@ const Prescriptions = () => {
   const [responseData, setResponseData] = useState<{ 'all drugs': Drug[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [loading, setLoading] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -57,13 +59,16 @@ const Prescriptions = () => {
   }, []);
 
   const searchAlternatives = async (medication_name: string) => {
-    setError(null);  // Reset errors
+    setError(null);
+    setLoading(true);
     try {
         const response = await axios.post('http://localhost:8000/api/name_search/', { name: medication_name });
         setResponseData(response.data);
+        setLoading(false);
     } catch (error) {
         console.error('Search failed:', error);
         setError('Search failed. Please try again.');
+        setLoading(false);
     }
   };
 
@@ -145,6 +150,9 @@ const Prescriptions = () => {
         </tbody>
       </table>
       {error && <div className={styles.errorMessage}>{error}</div>}
+      {loading ? (
+        <CircularProgress color="danger" aria-label="Loading..." />
+      ) : null}
       {responseData && (
         <div className="results">
           <table className={styles.prescriptionTable}>
