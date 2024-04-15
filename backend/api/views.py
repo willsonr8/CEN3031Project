@@ -85,6 +85,22 @@ class PrescriptionListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class PrescriptionDeleteView(generics.DestroyAPIView):
+    serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        rxid = self.kwargs.get('rxid')
+        return Prescription.objects.filter(user=self.request.user, rxid=rxid)
+
+    def delete(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({'detail': 'No prescription found with the provided ID for the current user.'}, status=HTTP_404_NOT_FOUND)
+        queryset.first().delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 def manage_results(drug_list):
     for drug in drug_list:
         corrected_name = ""

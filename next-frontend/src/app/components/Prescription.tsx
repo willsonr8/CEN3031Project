@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
 import styles from '../prescriptions.module.css';
 
@@ -36,10 +37,34 @@ const Prescriptions = () => {
     } catch (error) {
         console.error('Failed to fetch prescriptions:', error);
     }
-    };
+  };
 
     fetchPrescriptions();
   }, []);
+
+  const deletePrescription = async (rxid: any) => {
+    const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
+    if (!accessToken) {
+        console.error('Access token is not available.');
+        return;
+    }
+
+    if (window.confirm('Are you sure you want to delete this prescription?')) {
+      try {
+          const response = await axios.delete(`http://localhost:8000/api/prescriptions/${rxid}/`, {
+              headers: {
+                  Authorization: `Bearer ${accessToken}`
+              },
+              withCredentials: true
+          });
+          setPrescriptions(prev => prev.filter(p => p.rxid !== rxid));
+      } catch (error) {
+          console.error('Failed to delete prescription:', error);
+      }
+    } else {
+      console.log('Deletion cancelled.');
+    }
+  };
 
   return (
     <div className={styles.prescriptionContainer}>
@@ -47,11 +72,12 @@ const Prescriptions = () => {
       <table className={styles.prescriptionTable}>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>RXID</th>
             <th>Medication</th>
             <th>Dosage</th>
             <th>Expiration Date</th>
             <th>Pharmacy</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -63,11 +89,14 @@ const Prescriptions = () => {
                 <td>{prescription.dosage}</td>
                 <td>{prescription.expiration_date}</td>
                 <td>{prescription.pharmacy_name}</td>
+                <td>
+                    <button onClick={() => deletePrescription(prescription.rxid)}>Delete</button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={5} style={{ textAlign: 'center' }}>No prescriptions added yet.</td>
+              <td colSpan={6} style={{ textAlign: 'center' }}>No prescriptions added yet.</td>
             </tr>
           )}
         </tbody>
