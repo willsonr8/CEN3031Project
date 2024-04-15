@@ -64,7 +64,6 @@ const DrugStoresMap =({ googleApiKey })=> {
                     setTimeout(() => {
                         const bounds = new google.maps.LatLngBounds();
                         markers.forEach((marker) => bounds.extend(marker.getPosition()));
-                        map.fitBounds(bounds);
                     }, 500);
                 }
             });
@@ -109,6 +108,7 @@ const DrugStoresMap =({ googleApiKey })=> {
                         //     title: "Current Location",
                         // })
                         // markers.push(userLocationMarker)
+                        performSearch();
                     },
                     () => {
                         handleLocationError(true, infoWindow, map.getCenter());
