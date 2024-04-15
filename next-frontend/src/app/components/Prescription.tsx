@@ -1,6 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../prescriptions.module.css';
 
@@ -12,35 +11,52 @@ interface Prescription {
   pharmacy_name: string;
 }
 
+interface Drug {
+  rxtermsProperties: {
+    brandName: string;
+    displayName: string;
+    strength: string;
+    rxtermsDoseForm: string;
+    route: string;
+  };
+}
+
 const Prescriptions = () => {
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [responseData, setResponseData] = useState<{ 'all drugs': Drug[] } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     const fetchPrescriptions = async () => {
-
-    const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
-  
-    if (!accessToken) {
-        console.error('Access token is not available.');
-        return;
-    }
-  
-    try {
-        const response = await axios.get('http://localhost:8000/api/prescriptions/', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            },
-            withCredentials: true
-        });
-
-        setPrescriptions(response.data);
-    } catch (error) {
-        console.error('Failed to fetch prescriptions:', error);
-    }
-  };
-
+      const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
+      if (!accessToken) {
+          console.error('Access token is not available.');
+          return;
+      }
+      try {
+          const response = await axios.get('http://localhost:8000/api/prescriptions/', {
+              headers: { Authorization: `Bearer ${accessToken}` },
+              withCredentials: true
+          });
+          setPrescriptions(response.data);
+      } catch (error) {
+          console.error('Failed to fetch prescriptions:', error);
+      }
+    };
     fetchPrescriptions();
   }, []);
+
+  const searchAlternatives = async (medication_name: string) => {
+    setError(null);  // Reset errors
+    try {
+        const response = await axios.post('http://localhost:8000/api/name_search/', { name: medication_name });
+        setResponseData(response.data);
+    } catch (error) {
+        console.error('Search failed:', error);
+        setError('Search failed. Please try again.');
+    }
+  };
 
   const deletePrescription = async (rxid: any) => {
     const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
@@ -48,7 +64,7 @@ const Prescriptions = () => {
         console.error('Access token is not available.');
         return;
     }
-
+  
     if (window.confirm('Are you sure you want to delete this prescription?')) {
       try {
           const response = await axios.delete(`http://localhost:8000/api/prescriptions/${rxid}/`, {
@@ -63,6 +79,18 @@ const Prescriptions = () => {
       }
     } else {
       console.log('Deletion cancelled.');
+    }
+  };
+
+  const sortBy = (key: keyof Drug['rxtermsProperties']) => {
+    if (responseData && responseData['all drugs']) {
+      const sorted = [...responseData['all drugs']].sort((a, b) => {
+        const valueA = a.rxtermsProperties[key];
+        const valueB = b.rxtermsProperties[key];
+        return sortOrder === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+      setResponseData({ 'all drugs': sorted });
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     }
   };
 
@@ -81,28 +109,63 @@ const Prescriptions = () => {
           </tr>
         </thead>
         <tbody>
-          {prescriptions.length > 0 ? (
-            prescriptions.map(prescription => (
-              <tr key={prescription.rxid}>
-                <td>{prescription.rxid}</td>
-                <td>{prescription.medication_name}</td>
-                <td>{prescription.dosage}</td>
-                <td>{prescription.expiration_date}</td>
-                <td>{prescription.pharmacy_name}</td>
-                <td>
-                    <button onClick={() => deletePrescription(prescription.rxid)}>Delete</button>
-                </td>
-              </tr>
-            ))
-          ) : (
+          {prescriptions.map((prescription) => (
+            <tr key={prescription.rxid}>
+              <td>{prescription.rxid}</td>
+              <td>{prescription.medication_name}</td>
+              <td>{prescription.dosage}</td>
+              <td>{prescription.expiration_date}</td>
+              <td>{prescription.pharmacy_name}</td>
+              <td>
+                <button 
+                 onClick={() => deletePrescription(prescription.rxid)}
+                 className="px-3 py-1 text-white bg-custom-red rounded hover:bg-red-700 transition duration-300 ease-in-out mr-4"
+                 >Delete</button>
+                <button
+                className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-700 transition duration-300 ease-in-out"
+                onClick={() => searchAlternatives(prescription.medication_name)}>
+                  Search Alternatives</button>
+              </td>
+            </tr>
+          ))}
+          {prescriptions.length === 0 && (
             <tr>
               <td colSpan={6} style={{ textAlign: 'center' }}>No prescriptions added yet.</td>
             </tr>
           )}
         </tbody>
       </table>
+      {error && <div className={styles.errorMessage}>{error}</div>}
+      {responseData && (
+        <div className="results">
+          <table className={styles.prescriptionTable}>
+            <thead>
+              <tr>
+                <th onClick={() => sortBy('brandName')}>Brand</th>
+                <th onClick={() => sortBy('displayName')}>Display Name</th>
+                <th onClick={() => sortBy('strength')}>Strength</th>
+                <th onClick={() => sortBy('rxtermsDoseForm')}>Dose Form</th>
+                <th onClick={() => sortBy('route')}>Route</th>
+              </tr>
+            </thead>
+            <tbody>
+              {responseData['all drugs'].map((drug, index) => (
+                <tr key={index}>
+                  <td>{drug.rxtermsProperties.brandName}</td>
+                  <td>{drug.rxtermsProperties.displayName}</td>
+                  <td>{drug.rxtermsProperties.strength}</td>
+                  <td>{drug.rxtermsProperties.rxtermsDoseForm}</td>
+                  <td>{drug.rxtermsProperties.route}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Prescriptions;
+
+
