@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../prescriptions.module.css';
+import { Button } from '@nextui-org/react';
 
 interface Prescription {
   rxid: number;
@@ -26,6 +27,14 @@ const Prescriptions = () => {
   const [responseData, setResponseData] = useState<{ 'all drugs': Drug[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // getMonth() is zero-indexed
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   useEffect(() => {
     const fetchPrescriptions = async () => {
@@ -113,18 +122,18 @@ const Prescriptions = () => {
             <tr key={prescription.rxid}>
               <td>{prescription.rxid}</td>
               <td>{prescription.medication_name}</td>
-              <td>{prescription.dosage}</td>
-              <td>{prescription.expiration_date}</td>
+              <td>{prescription.dosage} mg</td>
+                <td>{formatDate(prescription.expiration_date)}</td>
               <td>{prescription.pharmacy_name}</td>
               <td>
-                <button 
+                <Button 
                  onClick={() => deletePrescription(prescription.rxid)}
                  className="px-3 py-1 text-white bg-custom-red rounded hover:bg-red-700 transition duration-300 ease-in-out mr-4"
-                 >Delete</button>
-                <button
+                 >Delete</Button>
+                <Button
                 className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-700 transition duration-300 ease-in-out"
                 onClick={() => searchAlternatives(prescription.medication_name)}>
-                  Search Alternatives</button>
+                  Search Alternatives</Button>
               </td>
             </tr>
           ))}
