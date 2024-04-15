@@ -9,6 +9,9 @@ from rest_framework.response import Response
 from .models import SearchHistory
 from .serializers import SearchHistorySerializer
 from django.utils.timezone import now
+from rest_framework import generics, permissions
+from .models import Prescription
+from .serializers import PrescriptionSerializer
 
 def get_data(request):
     message = {'text': 'Hello from Django!'}
@@ -28,6 +31,7 @@ def name_search(request):
             return JsonResponse({'error': 'No drug name provided'})
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=400)
+    
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 # function to save the search history
@@ -63,6 +67,39 @@ def get_search_history(request):
     history = SearchHistory.objects.filter(user=request.user).order_by('-created_at')
     serializer = SearchHistorySerializer(history, many=True)
     return Response(serializer.data)
+
+# To create a prescription from frontend, the user must be authenticated,
+# So first access the token from the cookie, Then do a post request to the endpoint Like this below
+# const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
+# check if accessToken is not null, then do the post request
+# await axios.post('http://localhost:8000/api/prescriptions/', Data(This is the JSON data, that includes 'rxid', 'medication_name', 'dosage', 'expiration_date', 'pharmacy_name'), 
+# {headers: { Authorization: `Bearer ${accessToken}` },withCredentials: true,});
+
+# To fetch the prescriptions do the same thing, just a 'get' request to the endpoint, Include the token and with credentials true
+class PrescriptionListCreateView(generics.ListCreateAPIView):
+    serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Prescription.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class PrescriptionDeleteView(generics.DestroyAPIView):
+    serializer_class = PrescriptionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        rxid = self.kwargs.get('rxid')
+        return Prescription.objects.filter(user=self.request.user, rxid=rxid)
+
+    def delete(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({'detail': 'No prescription found with the provided ID for the current user.'}, status=HTTP_404_NOT_FOUND)
+        queryset.first().delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 def manage_results(drug_list):
     for drug in drug_list:

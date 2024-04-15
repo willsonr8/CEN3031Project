@@ -5,6 +5,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
+import { CircularProgress } from "@nextui-org/react";
 
 import "../NameSearch.css";
 
@@ -14,6 +15,7 @@ const NameSearch = () => {
     const [error, setError] = useState(false);
     const [searchHistory, setSearchHistory] = useState([]);
     const [sortOrder, setSortOrder] = useState('asc');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchSearchHistory();
@@ -55,26 +57,32 @@ const NameSearch = () => {
     };
 
     const performSearch = async (query: string) => {
+        setLoading(true);
         try {
             const response = await axios.post('http://localhost:8000/api/name_search/', { name: query });
             setResponseData(response.data);
             setError(false);
+            setLoading(false);
         } catch (error) {
             console.error('Error performing search:', error);
             setError(true);
+            setLoading(false);
             return;
         }
     };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axios.post('http://localhost:8000/api/name_search/', { name: drug_name });
             setResponseData(response.data);
             setError(false);
             saveSearchHistory(drug_name);
+            setLoading(false);
         } catch (error) {
             console.error('Error', error);
             setError(true);
+            setLoading(false);
         }
     };
 
@@ -198,6 +206,9 @@ const NameSearch = () => {
                     </Button>
                 ))}
             </div>
+            {loading ? (
+            <CircularProgress color="danger" aria-label="Loading..." />
+            ) : null}
             {error ? (
                 <div className="text-red-500">
                     Please type in your medication.

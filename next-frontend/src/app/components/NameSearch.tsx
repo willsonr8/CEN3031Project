@@ -5,6 +5,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
+import { CircularProgress } from "@nextui-org/react";
 
 import "../NameSearch.css";
 
@@ -14,16 +15,20 @@ const NameSearch = () => {
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axios.post('http://localhost:8000/api/name_search/', { name: drug_name });
             setResponseData(response.data);
             setError(false); // Reset error state on successful response
+            setLoading(false);
         } catch (error) {
             console.error('Error', error);
             setError(true); // Set error state to true on error
+            setLoading(false);
         }
     };
 
@@ -136,6 +141,9 @@ const NameSearch = () => {
                     Search
                 </Button>
             </form>
+            {loading ? (
+            <CircularProgress color="danger" aria-label="Loading..." />
+            ) : null}
             {error ? (
                 <div className="text-red-500">
                     Please type in your medication.
