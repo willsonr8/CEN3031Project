@@ -8,6 +8,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from .serializers import UserAccountSerializer
+from rest_framework import permissions, generics
+from .models import UserAccount
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -83,3 +86,10 @@ class LogoutView(APIView):
         response.delete_cookie("refresh")
 
         return response
+    
+class UserAccountDetailView(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserAccountSerializer
+
+    def get_object(self):
+        return self.request.user
