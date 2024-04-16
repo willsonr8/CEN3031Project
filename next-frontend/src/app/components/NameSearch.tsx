@@ -118,6 +118,7 @@ const NameSearch = () => {
 
 
     // @ts-ignore
+    // @ts-ignore
     return (
         <div className="flex flex-col items-center w-full">
             <form
@@ -157,23 +158,23 @@ const NameSearch = () => {
                 <>
                     {loading ? (
                         <CircularProgress color="danger" aria-label="Loading..." />
-                        ) : null}
+                    ) : null}
                     {error ? (
                         <div className="text-red-500">
                             Please type in your medication.
                         </div>
-                     ) : null}
-                     {responseData && responseData['all drugs'].length === 0 && !error ? (
+                    ) : null}
+                    {responseData && responseData['all drugs'].length === 0 && !error ? (
                          <div className="text-red-500">
                               No drugs found, please try again.
                          </div>
-                     ) : null}
-                     {responseData && responseData['all drugs'].length === 0 && !error ? (
+                    ) : null}
+                    {responseData && responseData['all drugs'].length === 0 && !error ? (
                          <div className="text-red-500">
                              No drugs found, please try again.
                          </div>
-                     ) : null}
-                     {responseData && responseData['all drugs'] && !error && (
+                    ) : null}
+                    {responseData && responseData['all drugs'] && !error && (
                         <div className="w-full max-w-2xl text-white">
                             <div className="table-container">
                                 <table className="center table">
@@ -190,14 +191,14 @@ const NameSearch = () => {
                                 </table>
                             </div>
                         </div>
-                     )}
+                    )}
                  </>
-             )}
-             {selected === 'map' && (
+            )}
+            {selected === 'map' && (
                 <div>
                     <DrugStoresMap googleApiKey={googleApiKey} />
                 </div>
-             )}
+            )}
          </div>
      );
 };

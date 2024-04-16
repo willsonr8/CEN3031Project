@@ -2,19 +2,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/react";
+import {Input, Tab, Tabs} from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
 import { CircularProgress } from "@nextui-org/react";
 
 import "../NameSearch.css";
+import DrugStoresMap from "@/app/components/DrugStoresMap";
 
 const NameSearch = () => {
+    const [selected, setSelected] = useState("search");
     const [drug_name, set_drug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState(false);
     const [searchHistory, setSearchHistory] = useState([]);
     const [sortOrder, setSortOrder] = useState('asc');
+    const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -199,6 +202,15 @@ const NameSearch = () => {
                     Search
                 </Button>
             </form>
+            <Tabs
+                selectedKey={selected}
+                onSelectionChange={setSelected}
+            >
+                <Tab key="search">Search</Tab>
+                <Tab key="map">Map</Tab>
+            </Tabs>
+            {selected === 'search' && (
+                <>
             <div>
                 {searchHistory.map((query, index) => (
                     <Button key={index} style={{margin: '0 8px 8px 0'}} color="default" onClick={() => performSearch(query)}>
@@ -241,6 +253,13 @@ const NameSearch = () => {
                         </div>
                     </div>
                 )}
+                </>
+            )}
+            {selected === 'map' && (
+                <div>
+                    <DrugStoresMap googleApiKey={googleApiKey} />
+                </div>
+            )}
         </div>
     );
 };
