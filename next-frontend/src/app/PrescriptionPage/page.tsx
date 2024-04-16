@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import NavBar from '../components/AccountNavbar';
 import NameSearch from '../components/NameSearch';
 import PrescriptionPage from '../components/Prescription';
+import PrescriptionButton from '../components/PrescriptionButton';
 import styles from '../home.module.css';
 
 const AccountPage: React.FC = () => {
@@ -23,9 +24,10 @@ const AccountPage: React.FC = () => {
     }, [router]);
 
     return (
-        <div>
+        <div style={{ textAlign: "center", fontSize: "24px" }}>
             <NavBar />
             <PrescriptionPage />
+            <PrescriptionButton />
         </div>
     );
 };

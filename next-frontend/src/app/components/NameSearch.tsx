@@ -7,6 +7,7 @@ import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
 import { Tab, Tabs } from "@nextui-org/react";
 import DrugStoresMap from "@/app/components/DrugStoresMap";
+import { CircularProgress } from "@nextui-org/react";
 
 import "../NameSearch.css";
 
@@ -18,17 +19,20 @@ const NameSearch = () => {
     const [error, setError] = useState<boolean>(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-
-
+    const [loading, setLoading] = useState(false);
+  
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const response = await axios.post('http://localhost:8000/api/name_search/', { name: drug_name });
             setResponseData(response.data);
             setError(false); // Reset error state on successful response
+            setLoading(false);
         } catch (error) {
             console.error('Error', error);
             setError(true); // Set error state to true on error
+            setLoading(false);
         }
     };
 
@@ -151,17 +155,25 @@ const NameSearch = () => {
             </Tabs>
             {selected === 'search' && (
                 <>
+                    {loading ? (
+                        <CircularProgress color="danger" aria-label="Loading..." />
+                        ) : null}
                     {error ? (
                         <div className="text-red-500">
                             Please type in your medication.
                         </div>
-                    ) : null}
-                    {responseData && responseData['all drugs'].length === 0 && !error ? (
-                        <div className="text-red-500">
-                            No drugs found, please try again.
-                        </div>
-                    ) : null}
-                    {responseData && responseData['all drugs'] && !error && (
+                     ) : null}
+                     {responseData && responseData['all drugs'].length === 0 && !error ? (
+                         <div className="text-red-500">
+                              No drugs found, please try again.
+                         </div>
+                     ) : null}
+                     {responseData && responseData['all drugs'].length === 0 && !error ? (
+                         <div className="text-red-500">
+                             No drugs found, please try again.
+                         </div>
+                     ) : null}
+                     {responseData && responseData['all drugs'] && !error && (
                         <div className="w-full max-w-2xl text-white">
                             <div className="table-container">
                                 <table className="center table">
@@ -178,16 +190,16 @@ const NameSearch = () => {
                                 </table>
                             </div>
                         </div>
-                    )}
-                </>
-            )}
-            {selected === 'map' && (
+                     )}
+                 </>
+             )}
+             {selected === 'map' && (
                 <div>
                     <DrugStoresMap googleApiKey={googleApiKey} />
                 </div>
-            )}
-        </div>
-    );
+             )}
+         </div>
+     );
 };
 
 export default NameSearch;

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Message
 from .models import SearchHistory
+from .models import Prescription
 
 admin.site.register(Message)
 
@@ -11,3 +12,10 @@ class SearchHistoryAdmin(admin.ModelAdmin):
     search_fields = ('query',)
 
 admin.site.register(SearchHistory, SearchHistoryAdmin)
+
+
+@admin.register(Prescription)
+class PrescriptionAdmin(admin.ModelAdmin):
+    list_display = ('medication_name', 'user', 'rxid', 'dosage', 'expiration_date', 'pharmacy_name')
+    list_filter = ('pharmacy_name', 'expiration_date')
+    search_fields = ('medication_name', 'user__username', 'rxid')
