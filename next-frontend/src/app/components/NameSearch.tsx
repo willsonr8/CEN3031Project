@@ -5,18 +5,22 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
+import { Tab, Tabs } from "@nextui-org/react";
+import DrugStoresMap from "@/app/components/DrugStoresMap";
 import { CircularProgress } from "@nextui-org/react";
 
 import "../NameSearch.css";
 
 const NameSearch = () => {
     let chosen_prescriptions = [];
+    const [selected, setSelected] = useState("search");
     const [drug_name, set_drug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [loading, setLoading] = useState(false);
-
+  
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -93,7 +97,6 @@ const NameSearch = () => {
     };
 
 
-
     const renderTableData = () => {
         if (responseData && responseData["all drugs"]) {
             try {
@@ -113,6 +116,8 @@ const NameSearch = () => {
         return null;
     };
 
+
+    // @ts-ignore
     return (
         <div className="flex flex-col items-center w-full">
             <form
@@ -126,9 +131,9 @@ const NameSearch = () => {
                     size="lg"
                     radius="full"
                     placeholder="Type medication name..."
-                    startContent={
-                        <SearchIcon className="rounded-s-lg font-2 text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
-                    }
+                        startContent={
+                    <SearchIcon className="rounded-s-lg font-2 text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
+                }
                 />
                 <Button
                     className="red-dark"
@@ -141,43 +146,60 @@ const NameSearch = () => {
                     Search
                 </Button>
             </form>
-            {loading ? (
-            <CircularProgress color="danger" aria-label="Loading..." />
-            ) : null}
-            {error ? (
-                <div className="text-red-500">
-                    Please type in your medication.
-                </div>
-            ) : null}
-            {responseData &&
-            responseData['all drugs'].length === 0 &&
-            !error ? (
-                <div className="text-red-500">
-                    No drugs found, please try again.
-                </div>
-            ) : null}
-            {responseData &&
-                responseData['all drugs'] &&
-                !error && (
-                    <div className="w-full max-w-2xl text-white">
-                        <div className="table-container">
-                            <table className="center table">
-                                <thead>
-                                <tr>
-                                    <th onClick={sortByBrandName}>Brand</th>
-                                    <th onClick={sortByDisplayName}>Display Name</th>
-                                    <th onClick={sortByStrength}>Strength</th>
-                                    <th onClick={sortByDoseForm}>Dose Form</th>
-                                    <th onClick={sortByRoute}>Route</th>
-                                </tr>
-                                </thead>
-                                <tbody>{renderTableData()}</tbody>
-                            </table>
+            <Tabs
+                selectedKey={selected}
+                onSelectionChange={setSelected}
+            >
+                <Tab key="search">Search</Tab>
+                <Tab key="map">Map</Tab>
+            </Tabs>
+            {selected === 'search' && (
+                <>
+                    {loading ? (
+                        <CircularProgress color="danger" aria-label="Loading..." />
+                        ) : null}
+                    {error ? (
+                        <div className="text-red-500">
+                            Please type in your medication.
                         </div>
-                    </div>
-                )}
-        </div>
-    );
+                     ) : null}
+                     {responseData && responseData['all drugs'].length === 0 && !error ? (
+                         <div className="text-red-500">
+                              No drugs found, please try again.
+                         </div>
+                     ) : null}
+                     {responseData && responseData['all drugs'].length === 0 && !error ? (
+                         <div className="text-red-500">
+                             No drugs found, please try again.
+                         </div>
+                     ) : null}
+                     {responseData && responseData['all drugs'] && !error && (
+                        <div className="w-full max-w-2xl text-white">
+                            <div className="table-container">
+                                <table className="center table">
+                                    <thead>
+                                    <tr>
+                                        <th onClick={sortByBrandName}>Brand</th>
+                                        <th onClick={sortByDisplayName}>Display Name</th>
+                                        <th onClick={sortByStrength}>Strength</th>
+                                        <th onClick={sortByDoseForm}>Dose Form</th>
+                                        <th onClick={sortByRoute}>Route</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>{renderTableData()}</tbody>
+                                </table>
+                            </div>
+                        </div>
+                     )}
+                 </>
+             )}
+             {selected === 'map' && (
+                <div>
+                    <DrugStoresMap googleApiKey={googleApiKey} />
+                </div>
+             )}
+         </div>
+     );
 };
 
 export default NameSearch;

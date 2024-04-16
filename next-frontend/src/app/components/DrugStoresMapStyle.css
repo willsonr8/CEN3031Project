@@ -1,0 +1,32 @@
+/*
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map.
+ */
+#map {
+  height: 400px;
+  width: 600px
+}
+
+/*
+ * Optional: Makes the sample page fill the window.
+ */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-map-control-button {
+  background-color: #007bff; /* Change background color as desired */
+  color: white; /* Text color */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px; /* Adjust padding to increase button size */
+  font-size: 20px; /* Increase font size */
+  font-weight: bold; /* Optionally increase font weight */
+  cursor: pointer;
+}
+.custom-map-control-button:hover {
+  background-color: #0056b3; /* Change background color on hover */
+}
