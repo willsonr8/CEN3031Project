@@ -62,13 +62,16 @@ const Prescriptions = () => {
     setError(null);
     setLoading(true);
     try {
-        const response = await axios.post('http://localhost:8000/api/name_search/', { name: medication_name });
-        setResponseData(response.data);
-        setLoading(false);
+      const response = await axios.post('http://localhost:8000/api/name_search/', { name: medication_name });
+      const filteredData = response.data['all drugs'].filter((drug: Drug) => 
+        drug.rxtermsProperties.brandName.trim().toUpperCase() === 'GENERIC'
+      );
+      setResponseData({ 'all drugs': filteredData });
+      setLoading(false);
     } catch (error) {
-        console.error('Search failed:', error);
-        setError('Search failed. Please try again.');
-        setLoading(false);
+      console.error('Search failed:', error);
+      setError('Search failed. Please try again.');
+      setLoading(false);
     }
   };
 
@@ -154,8 +157,8 @@ const Prescriptions = () => {
         <CircularProgress color="danger" aria-label="Loading..." />
       ) : null}
       {responseData && (
-        <div className="results">
-          <table className={styles.prescriptionTable}>
+        <div className="w-full  text-white">
+          <table className={styles.searchResults}>
             <thead>
               <tr>
                 <th onClick={() => sortBy('brandName')}>Brand</th>
