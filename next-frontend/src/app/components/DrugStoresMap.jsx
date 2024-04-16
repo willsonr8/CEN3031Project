@@ -16,6 +16,11 @@ const DrugStoresMap =({ googleApiKey })=> {
         infoWindow.open(map);
     }
 
+    function clearMarkers(markers) {
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+    }
+
     async function initMap() {
         if (typeof google === 'undefined') {
             console.error('Google Maps API not loaded');
@@ -34,7 +39,7 @@ const DrugStoresMap =({ googleApiKey })=> {
         service = new google.maps.places.PlacesService(map);
         infoWindow = new google.maps.InfoWindow();
 
-        function performSearch() {
+        function performSearch(userLocationMarker = null) {
             const request = {
                 query: "Drug Store",
                 fields: ["name", "geometry"],
@@ -44,12 +49,13 @@ const DrugStoresMap =({ googleApiKey })=> {
             service.textSearch(request, (results, status) => {
                 if (status === google.maps.places.PlacesServiceStatus.OK && results) {
                     // Clear existing markers
-                    markers.forEach(marker => marker.setMap(null));
-                    markers = [];
+                    clearMarkers(markers)
 
                     // Fit bounds to display all markers
                     const bounds = new google.maps.LatLngBounds();
                     results.forEach((place) => {
+                        // for unknown reasons this has to be marker. google.maps.marker.advancedmarkerelemnt does not work properly.
+                        const newInfoWindow = new google.maps.InfoWindow();
                         const marker = new google.maps.Marker({
                             map: map,
                             position: place.geometry.location,
@@ -60,10 +66,24 @@ const DrugStoresMap =({ googleApiKey })=> {
                         } else {
                             bounds.union(place.geometry.location);
                         }
+                        google.maps.event.addListener(marker, "click", () => {
+                            const content = document.createElement("div");
+                            const nameElement = document.createElement("h2");
+
+                            nameElement.textContent = place.name;
+                            content.appendChild(nameElement);
+
+                            const placeAddressElement = document.createElement("p");
+
+                            placeAddressElement.textContent = place.formatted_address;
+                            content.appendChild(placeAddressElement);
+                            infoWindow.setContent(content);
+                            infoWindow.open(map, marker);
+                        });
                     });
                     setTimeout(() => {
                         const bounds = new google.maps.LatLngBounds();
-                        markers.forEach((marker) => bounds.extend(marker.getPosition()));
+                        markers.forEach((marker) => bounds.extend(marker.position));
                     }, 500);
                 }
             });
@@ -79,6 +99,7 @@ const DrugStoresMap =({ googleApiKey })=> {
             }
         })
 
+        let userLocationMarker = null;
 
         const locationButton = document.createElement("button");
 
@@ -88,6 +109,7 @@ const DrugStoresMap =({ googleApiKey })=> {
         locationButton.addEventListener("click", () => {
             // Try HTML5 geolocation.
             if (navigator.geolocation) {
+                clearMarkers(markers)
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const pos = {
@@ -99,15 +121,15 @@ const DrugStoresMap =({ googleApiKey })=> {
                         infoWindow.setContent("Current Location");
                         infoWindow.open(map);
                         map.setCenter(pos);
-                        map.setZoom(13)
-                        //const pinBackground = new PinElement({background: "#FBBC04"})
-                        // const userLocationMarker = new google.maps.marker.AdvancedMarkerElement({
-                        //     map: map,
-                        //     position: pos,
-                        //     content: pinBackground.element,
-                        //     title: "Current Location",
-                        // })
-                        // markers.push(userLocationMarker)
+                        map.setZoom(13);
+                        if (userLocationMarker !== null) {
+                            userLocationMarker.setMap(null);
+                        }
+                        userLocationMarker = new google.maps.Marker({
+                            map: map,
+                            position: pos,
+                            icon: {path: google.maps.SymbolPath.CIRCLE, scale: 10,}
+                        })
                         performSearch();
                     },
                     () => {
