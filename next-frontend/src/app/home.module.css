@@ -87,3 +87,10 @@
     font-weight: 700;
     cursor: pointer;
 }
+
+.inputCheckbox {
+    font-size: 16px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}

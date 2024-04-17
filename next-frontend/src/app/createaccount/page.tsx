@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {Checkbox} from "@nextui-org/react";
 import axios from "axios";
 import styles from "../home.module.css";
 
@@ -10,29 +11,30 @@ const CreateAccountPage: React.FC = () => {
     const [dateOfBirth, setDateOfBirth] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [consent, setConsent] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Check if all fields are filled out
-        if (!name || !dateOfBirth || !email || !password) {
-            setErrorMessage("Please fill out all fields.");
+        // Check if all fields and consent are valid
+        if (!name || !dateOfBirth || !email || !password || !consent) {
+            setErrorMessage("Please fill out all fields and agree to the data collection consent.");
             return;
         }
 
         try {
             const response = await axios.post("http://localhost:8000/api/users/", {
-                first_name: name,  // Use "first_name" instead of "name"
+                first_name: name,
                 email,
-                date_of_birth: dateOfBirth,  // Use "date_of_birth" for the field name
+                date_of_birth: dateOfBirth,
                 password,
             }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             window.location.href = "/login";
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -52,7 +54,9 @@ const CreateAccountPage: React.FC = () => {
             <div className={styles.container}>
                 <div>Medicate</div>
                 <div className={styles.text}>Create an Account</div>
+                
                 <form className={styles.inputs} onSubmit={handleRegister}>
+                    
                     <div className={styles.input}>
                         <Image src="/icons/user.png" width={22} height={22} alt="user" />
                         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -66,9 +70,21 @@ const CreateAccountPage: React.FC = () => {
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className={styles.input}>
-                        <Image src="/icons/password.png" width={19} height={22} alt="password" />
+                        <Image src="/icons/password.png" width= {19} height={22} alt="password" />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
+
+                    <div className={styles.inputCheckbox}>
+                    <Checkbox isSelected={consent} onValueChange={setConsent}>
+                        I consent the collection of personal data.
+                    </Checkbox>
+                    </div>
+                    <label htmlFor="dataConsentCheckbox">
+                    <Link href="/ConsentPage">
+                        <div className="ml-1 underline">Read more</div>
+                    </Link>
+                    </label>
+   
                     {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
                     <div className={styles.buttonContainer}>
                         <Link href="/">
