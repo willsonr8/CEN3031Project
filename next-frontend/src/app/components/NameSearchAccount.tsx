@@ -6,6 +6,7 @@ import {Input, Tab, Tabs} from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
 import { SearchIcon } from "./SearchIcon";
 import { CircularProgress } from "@nextui-org/react";
+import { Key } from "@react-types/shared";
 
 import "../NameSearch.css";
 import DrugStoresMap from "@/app/components/DrugStoresMap";
@@ -204,7 +205,7 @@ const NameSearch = () => {
             </form>
             <Tabs
                 selectedKey={selected}
-                onSelectionChange={setSelected}
+                onSelectionChange={(value: Key) => setSelected(value.toString())}
             >
                 <Tab key="search">Search</Tab>
                 <Tab key="map">Map</Tab>
