@@ -59,7 +59,7 @@ const DeleteAccount: React.FC = (): React.ReactNode => {
                         <Link href="/account">
                             <div className={styles.button}>Cancel</div>
                         </Link>
-                        <button type="submit" className={styles.button}>Comfirm Deletion</button>
+                        <button type="submit" className={styles.button}>Confirm Deletion</button>
                     </div>
                 </form>
             </div>

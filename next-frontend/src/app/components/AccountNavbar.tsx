@@ -1,10 +1,31 @@
 import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from '@nextui-org/react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 const NavBar = () => {
     const router = useRouter();
+    const [activeNavItem, setActiveNavItem] = useState('search');
+    const [tabColors, setTabColors] = useState({
+        search: 'foreground',
+        prescriptions: 'foreground',
+        account: 'foreground'
+    });
+
+    const handleNavItemClick = (navItem) => {
+        setActiveNavItem(navItem);
+        const newTabColors = {};
+        Object.keys(tabColors).forEach(item => {
+            newTabColors[item] = item === navItem ? 'blue' : 'foreground';
+        });
+        setTabColors(newTabColors);
+        if (navItem === 'prescriptions') {
+            handlePrescriptions();
+        } else if (navItem === 'account') {
+            handleSettings();
+        }
+    };
 
     const handleLogout = async () => {
       try {
@@ -31,18 +52,18 @@ const NavBar = () => {
                 <p color="#3c009d" className="font-bold text-inherit">Medicate</p>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem>
-                    <Link color="foreground" href="../SearchPage">
+                <NavbarItem isActive={activeNavItem === 'search'}>
+                    <Link color={tabColors.search} href="../SearchPage" onClick={() => handleNavItemClick('search')}>
                         Search
                     </Link>
                 </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" onClick={handlePrescriptions}>
+                <NavbarItem isActive={activeNavItem === 'prescriptions'}>
+                    <Link color={tabColors.prescriptions} href="../PrescriptionPage" onClick={() => handleNavItemClick('prescriptions')}>
                         Prescriptions
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive>
-                    <Link onClick={handleSettings} aria-current="page">
+                <NavbarItem isActive={activeNavItem === 'account'}>
+                    <Link color={tabColors.account} onClick={() => handleNavItemClick('account')}>
                         Account
                     </Link>
                 </NavbarItem>

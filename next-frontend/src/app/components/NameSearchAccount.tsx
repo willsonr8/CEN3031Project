@@ -207,9 +207,10 @@ const NameSearch = () => {
                 selectedKey={selected}
                 onSelectionChange={(value: Key) => setSelected(value.toString())}
             >
-                <Tab key="search">Search</Tab>
-                <Tab key="map">Map</Tab>
+                <Tab key="search" title="Search"></Tab>
+                <Tab key="map" title="Map"></Tab>
             </Tabs>
+            <br />
             {selected === 'search' && (
                 <>
             <div>
@@ -235,7 +236,7 @@ const NameSearch = () => {
                 </div>
             ) : null}
             {responseData &&
-                responseData['all drugs'] &&
+                responseData['all drugs'].length > 0 &&
                 !error && (
                     <div className="w-full max-w-2xl text-white">
                         <div className="table-container">
