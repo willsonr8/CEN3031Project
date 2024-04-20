@@ -4,6 +4,7 @@ import Head from 'next/head';
 const DrugStoresMap =({ googleApiKey })=> {
     let map, service, infoWindow;
     let userDraggedMap = false;
+    let userZoomed = false;
     let markers = [];
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -88,6 +89,9 @@ const DrugStoresMap =({ googleApiKey })=> {
                 }
             });
         }
+        map.addListener("zoom_changed", () => {
+            userZoomed = true;
+        })
 
         map.addListener("dragstart", () => {
             userDraggedMap = true;
@@ -96,6 +100,10 @@ const DrugStoresMap =({ googleApiKey })=> {
             if (userDraggedMap) {
                 performSearch();
                 userDraggedMap = false;
+            }
+            else if (userZoomed) {
+                performSearch();
+                userZoomed = false;
             }
         })
 
@@ -154,13 +162,13 @@ const DrugStoresMap =({ googleApiKey })=> {
         };
     }, [googleApiKey]);
     return (
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <Head>
                 <title>Geolocation</title>
                 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
                 <link rel="stylesheet" type="text/css" href="./DrugStoresMapStyle.css"/>
             </Head>
-            <div id="map" style={{width: '600px', height: '400px'}}></div>
+            <div id="map" style={{width: '600px', height: '400px', marginBottom: '20px'}}></div>
             <style>
                 {'.custom-map-control-button {\n' +
                     '  background-color: #fff;\n' +

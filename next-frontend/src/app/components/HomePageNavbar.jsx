@@ -22,14 +22,9 @@ export default function NavBar() {
         <p color="#3c009d" className="font-bold text-inherit">Medicate</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
         <NavbarItem isActive>
           <Link href="#" aria-current="page">
-            About Us
+            Search
           </Link>
         </NavbarItem>
       </NavbarContent>
