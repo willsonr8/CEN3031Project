@@ -6,6 +6,7 @@ from .views import (
 )
 from django.urls import path
 
+# Define the URL patterns for the users app
 urlpatterns = [
     path("jwt/create/", CustomTokenObtainPairView.as_view()),
     path("jwt/refresh/", CustomTokenRefreshView.as_view()),

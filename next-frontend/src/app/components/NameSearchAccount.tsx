@@ -2,11 +2,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@nextui-org/button";
-import {Input, Tab, Tabs} from "@nextui-org/react";
+import { Input, Tab, Tabs } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
 import { CircularProgress } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
-
 import "../NameSearch.css";
 import DrugStoresMap from "@/app/components/DrugStoresMap";
 

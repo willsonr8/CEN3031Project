@@ -1,17 +1,19 @@
 import requests
-import json
 
-
+# RxNorm API class
 class Rx:
+    # URL for the RxNorm API
     URL = 'https://rxnav.nlm.nih.gov'
 
     @classmethod
+    # function to make a request to the RxNorm API
     def make_request(cls, endpoint):
         r = requests.get(f'{cls.URL}{endpoint}')
         print(f'{cls.URL}{endpoint}')
         return r.json()
 
     @classmethod
+    # function to search for drugs by name
     def get_drugs(cls, value):
         '''
         input can be ingredient, brand name, clinical dose form, branded dose form, clinical
@@ -25,6 +27,7 @@ class Rx:
             return cls.make_request(endpoint)
 
     @classmethod
+    # function to get the properties of a drug by RxNorm ID
     def get_rx_properties(cls, id):
         if id is None:
             return {"error": "possible generic drug"}

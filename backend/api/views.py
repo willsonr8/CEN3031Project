@@ -19,7 +19,7 @@ def get_data(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-    
+# function to search for a drug by name, it calls the all_drug_search function to get the search results
 def name_search(request):
     try:
         data = json.loads(request.body)
@@ -68,32 +68,30 @@ def get_search_history(request):
     serializer = SearchHistorySerializer(history, many=True)
     return Response(serializer.data)
 
-# To create a prescription from frontend, the user must be authenticated,
-# So first access the token from the cookie, Then do a post request to the endpoint Like this below
-# const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
-# check if accessToken is not null, then do the post request
-# await axios.post('http://localhost:8000/api/prescriptions/', Data(This is the JSON data, that includes 'rxid', 'medication_name', 'dosage', 'expiration_date', 'pharmacy_name'), 
-# {headers: { Authorization: `Bearer ${accessToken}` },withCredentials: true,});
-
-# To fetch the prescriptions do the same thing, just a 'get' request to the endpoint, Include the token and with credentials true
+# Prescription view to list and create
 class PrescriptionListCreateView(generics.ListCreateAPIView):
     serializer_class = PrescriptionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # get the prescriptions for the current user
     def get_queryset(self):
         return Prescription.objects.filter(user=self.request.user)
-
+    
+    # create a new prescription for the current user
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+# Prescription view to delete a prescription
 class PrescriptionDeleteView(generics.DestroyAPIView):
     serializer_class = PrescriptionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # get the prescription with the provided rxid for the current user
     def get_queryset(self):
         rxid = self.kwargs.get('rxid')
         return Prescription.objects.filter(user=self.request.user, rxid=rxid)
-
+    
+    # delete the prescription if it exists
     def delete(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         if not queryset.exists():
@@ -101,6 +99,7 @@ class PrescriptionDeleteView(generics.DestroyAPIView):
         queryset.first().delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# function to manage the results of the drug search
 def manage_results(drug_list):
     for drug in drug_list:
         corrected_name = ""
@@ -114,6 +113,7 @@ def manage_results(drug_list):
             drug["rxtermsProperties"]["displayName"] = corrected_name
 
 @csrf_exempt
+# function to search for a drug by name using the RxNorm API
 def all_drug_search(drug_name):
     search_results = Rx.get_drugs(drug_name)
     drug_id = []

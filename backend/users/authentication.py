@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.conf import settings
 
+# Custom JWTAuthentication class to authenticate the user using JWT token
 class CustomJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
         try:
