@@ -8,14 +8,17 @@ export default function NavBar() {
 
   const router = useRouter();
 
+  //Login handler, route to login page
   const handleLogin = async () => {
     router.push("../login");
   };
 
+  //Signup handler, route to create account page
   const handleSignUp = async () => {
     router.push("../createaccount");
   };
 
+  //Render home page with login and signup buttons
   return (
     <Navbar isBordered  className="red-dark text-foreground bg-background" >
       <NavbarBrand>

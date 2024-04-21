@@ -27,6 +27,7 @@ const NavBar = () => {
         }
     };
 
+    //Logout handler, on success redirec to login page
     const handleLogout = async () => {
       try {
           await axios.post('http://localhost:8000/api/logout/');
@@ -38,14 +39,17 @@ const NavBar = () => {
       }
     };
 
+    //Redirect to prescription page
     const handlePrescriptions = async () => {
         router.push('/PrescriptionPage');
     };
 
+    //Redirect to settings page
     const handleSettings = async () => {
         router.push('/AccountSettingsPage');
     };
 
+    //Render the account navigation bar component with prescription, settings and logout page tabs
     return (
         <Navbar isBordered className="red-dark text-foreground bg-background">
             <NavbarBrand>
