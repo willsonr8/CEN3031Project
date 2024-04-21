@@ -1,5 +1,4 @@
 import requests
-import json
 
 # RxNorm API class
 class Rx:
