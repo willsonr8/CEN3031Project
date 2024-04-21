@@ -1,30 +1,37 @@
-import React from 'react';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from '@nextui-org/react';
-import { useState, useEffect } from 'react';
+
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link } from '@nextui-org/react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 const NavBar = () => {
     const router = useRouter();
-    const [activeNavItem, setActiveNavItem] = useState('search');
-    const [tabColors, setTabColors] = useState({
-        search: 'foreground',
-        prescriptions: 'foreground',
-        account: 'foreground'
-    });
+    const [activeNavItem, setActiveNavItem] = useState('');
 
+    useEffect(() => {
+        // Load the active nav item from local storage on mount
+        const storedNavItem = localStorage.getItem('activeNavItem');
+        if (storedNavItem) {
+            setActiveNavItem(storedNavItem);
+        }
+    }, []);
+
+    useEffect(() => {
+        // Store the active nav item in local storage on change
+        if (activeNavItem) {
+            localStorage.setItem('activeNavItem', activeNavItem);
+        }
+    }, [activeNavItem]);
+    
     //Navigation handler, route to correct pages depending on clicked button
-    const handleNavItemClick = (navItem) => {
+    const handleNavItemClick = (navItem: 'search' | 'prescriptions' | 'account') => {
         setActiveNavItem(navItem);
-        const newTabColors = {};
-        Object.keys(tabColors).forEach(item => {
-            newTabColors[item] = item === navItem ? 'blue' : 'foreground';
-        });
-        setTabColors(newTabColors);
         if (navItem === 'prescriptions') {
             handlePrescriptions();
         } else if (navItem === 'account') {
             handleSettings();
+        } else if (navItem === 'search') {
+            handleSearch();
         }
     };
 
@@ -38,6 +45,11 @@ const NavBar = () => {
       } catch (error) {
           console.error(error);
       }
+    };
+
+    //Redirect to search page
+    const handleSearch = async () => {
+        router.push('/SearchPage');
     };
 
     //Redirect to prescription page
@@ -58,17 +70,24 @@ const NavBar = () => {
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem isActive={activeNavItem === 'search'}>
-                    <Link color={tabColors.search} href="../SearchPage" onClick={() => handleNavItemClick('search')}>
+                    <Link
+                        color={activeNavItem === 'search' ? 'primary' : 'foreground'}
+                        onClick={() => handleNavItemClick('search')}
+                    >
                         Search
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive={activeNavItem === 'prescriptions'}>
-                    <Link color={tabColors.prescriptions} href="../PrescriptionPage" onClick={() => handleNavItemClick('prescriptions')}>
+                    <Link
+                    color={activeNavItem === 'prescriptions' ? 'primary' : 'foreground'}
+                    onClick={() => handleNavItemClick('prescriptions')}>
                         Prescriptions
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive={activeNavItem === 'account'}>
-                    <Link color={tabColors.account} onClick={() => handleNavItemClick('account')}>
+                    <Link
+                    color={activeNavItem === 'account' ? 'primary' : 'foreground'}
+                    onClick={() => handleNavItemClick('account')}>
                         Account
                     </Link>
                 </NavbarItem>

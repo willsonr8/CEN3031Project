@@ -1,8 +1,6 @@
 'use client'
-import React from 'react';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import axios from "axios";
 import styles from "../home.module.css";
 import { useRouter } from 'next/navigation';
@@ -56,7 +54,7 @@ const PrescriptionForm: React.FC = () => {
         //Add new prescription under the current authorization token
         //If an error is thrown, set error message, otherwise add the prescription as normal
         try {
-            const response = await axios.post("http://localhost:8000/api/prescriptions/", {
+            await axios.post("http://localhost:8000/api/prescriptions/", {
                 rxid,
                 medication_name,
                 dosage,
@@ -66,11 +64,7 @@ const PrescriptionForm: React.FC = () => {
             
             window.location.href = "/PrescriptionPage";
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response) {
-                setErrorMessage("Prescription failed. Please try again.");
-            } else {
-                console.error(error);
-            }
+            setErrorMessage("Prescription failed. Please try again.");
         }
     };
 

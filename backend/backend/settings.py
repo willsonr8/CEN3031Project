@@ -28,7 +28,7 @@ if path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-tjnh4o2xzqr+6+o&btw4s%4g*v4_1#un9*!p7l8t^(79^95c9b"
+SECRET_KEY = getenv("DJANGO_SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -100,15 +100,6 @@ DATABASES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
-# AWS, for future use
-#DEFAULT_FROM_EMAIL = getenv("AWS_SES_FROM_EMAIL")
-
-#AWS_SES_ACCESS_KEY_ID = getenv("AWS_SES_ACCESS_KEY_ID")
-#AWS_SES_SECRET_ACCESS_KEY = getenv("AWS_SES_SECRET_ACCESS_KEY")
-#AWS_SES_REGION_NAME = getenv("AWS_SES_REGION_NAME")
-#AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-#AWS_SES_FROM_EMAIL = getenv("AWS_SES_FROM_EMAIL")
-#USE_SES_V2 = True
 
 DOMAIN = getenv("DOMAIN")
 SITE_NAME = "Medicate"
