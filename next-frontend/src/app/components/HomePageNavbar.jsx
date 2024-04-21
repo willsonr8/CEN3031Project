@@ -1,8 +1,7 @@
 'use client'
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
-import styles from "../home.module.css";
 
 export default function NavBar() {
 

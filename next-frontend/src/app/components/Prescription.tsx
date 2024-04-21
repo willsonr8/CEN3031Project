@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../prescriptions.module.css';
-import { Button } from '@nextui-org/react';
-import { CircularProgress } from "@nextui-org/react";
+import { CircularProgress, Button } from "@nextui-org/react";
 
 //Define prescription properties
 interface Prescription {
