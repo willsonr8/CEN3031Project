@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
-
+# custom user account manager
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None, **kwargs):
         """
@@ -40,7 +40,7 @@ class UserAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
+# custom user model
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         max_length=255,
