@@ -2,14 +2,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/react";
-import { Checkbox } from "@nextui-org/checkbox";
+import { Input, Tab, Tabs } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
-import { Tab, Tabs } from "@nextui-org/react";
 import DrugStoresMap from "@/app/components/DrugStoresMap";
 import { CircularProgress } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
-
 import "../NameSearch.css";
 
 const NameSearch = () => {
