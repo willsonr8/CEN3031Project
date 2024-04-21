@@ -8,6 +8,7 @@ class SearchHistorySerializer(serializers.ModelSerializer):
         model = SearchHistory
         fields = ['id', 'query', 'created_at']
 
+# Prescription serializer
 class PrescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prescription

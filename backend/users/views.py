@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+# Custom TokenObtainPairView to set the access and refresh tokens as cookies
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -38,7 +39,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             )
 
         return response
-    
+# Custom TokenRefreshView to get access token using the refresh token from the cookie
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIE.get("refresh")
@@ -63,7 +64,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         
         return response
 
-
+# Custom TokenVerifyView to verify the token from the cookie
 class CustomTokenVerifyView(TokenVerifyView):
     def post(self, request, *args, **kwargs):
         access_token = request.COOKIE.get("access")
@@ -72,7 +73,7 @@ class CustomTokenVerifyView(TokenVerifyView):
             request.data["token"] = access_token
         
         return super().post(request, *args, **kwargs)
-
+# Custom view to logout the user by deleting the access and refresh tokens
 class LogoutView(APIView):
     permission_classes = [AllowAny]
     

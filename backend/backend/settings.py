@@ -99,6 +99,8 @@ DATABASES = {
 # email settings
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+# AWS, for future use
 #DEFAULT_FROM_EMAIL = getenv("AWS_SES_FROM_EMAIL")
 
 #AWS_SES_ACCESS_KEY_ID = getenv("AWS_SES_ACCESS_KEY_ID")
@@ -182,6 +184,7 @@ REST_FRAMEWORK = {
     ]
 }
 
+# JWT settings
 AUTH_COOKIE = "access"
 AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5
 AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24
@@ -190,6 +193,7 @@ AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = "/"
 AUTH_COOKIE_SAMESITE = "None"
 
+# DJOSER settings
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset{uid}/{token}',

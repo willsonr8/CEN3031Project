@@ -13,7 +13,7 @@ class SearchHistoryAdmin(admin.ModelAdmin):
 
 admin.site.register(SearchHistory, SearchHistoryAdmin)
 
-
+# Register the Prescription model with the admin site
 @admin.register(Prescription)
 class PrescriptionAdmin(admin.ModelAdmin):
     list_display = ('medication_name', 'user', 'rxid', 'dosage', 'expiration_date', 'pharmacy_name')
