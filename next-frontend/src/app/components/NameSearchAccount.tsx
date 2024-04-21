@@ -23,6 +23,9 @@ const NameSearch = () => {
         fetchSearchHistory();
     }, []);
 
+    //Function to fetch user's search history
+    //Verify access token in cookie, if not found then throws error
+    //Otherwise, set user's search history to reponse if no futher error is thrown, gives an error if one is thrown
     const fetchSearchHistory = async () => {
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
         if (!accessToken) {
@@ -41,6 +44,9 @@ const NameSearch = () => {
         }
     };
 
+    //Function to save user's search history
+    //Verify access token in cookie, if not found then throws error
+    //Otherwise, fetch and save user's search history if no futher error is thrown, gives an error if one is thrown
     const saveSearchHistory = async (query: string) => {
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
         if (!accessToken) {
@@ -58,6 +64,8 @@ const NameSearch = () => {
         }
     };
 
+    //Function to perform a search with name query, if no error is thrown, set response data to response
+    //Else set error
     const performSearch = async (query: string) => {
         setLoading(true);
         try {
@@ -72,6 +80,10 @@ const NameSearch = () => {
             return;
         }
     };
+
+    //Submit handler to save search history of drug name to user's search history
+    //If no error is thrown, set response data to response and save new search query to user's search history
+    //Else set error
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -88,8 +100,7 @@ const NameSearch = () => {
         }
     };
 
-
-
+    //Drug sorter based on brand name, sort by alphabetical ascending or descending depending on user choice
     const sortByBrandName = () => {
         if (responseData === null) {
             return;
@@ -105,6 +116,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on name, sort by alphabetical ascending or descending depending on user choice
     const sortByDisplayName = () => {
         if (responseData === null) {
             return;
@@ -120,6 +132,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on strength, sort by numerical ascending or descending depending on user choice
     const sortByStrength = () => {
         if (responseData === null) {
             return;
@@ -135,6 +148,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on dosage form, sort by alphabetical ascending or descending depending on user choice
     const sortByDoseForm = () => {
         if (responseData === null) {
             return;
@@ -150,6 +164,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on route of administration, sort by alphabetical ascending or descending depending on user choice
     const sortByRoute = () => {
         if (responseData === null) {
             return;
@@ -165,6 +180,9 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug properties table renderer
+    //If reponse data is valid (a drug is found), render table with drugs' brand name, name, strength, dosage form and route of administration
+    //Otherwise, log no drug found to console
     const renderTableData = () => {
         if (responseData && responseData["all drugs"]) {
             try {
@@ -184,7 +202,7 @@ const NameSearch = () => {
         return null;
     };
 
-
+    //Render the search page with search bar, navigation buttons, drugs' properties table, map of nearby pharmacies with specified drug in stock
     return (
         <div className="flex flex-col items-center w-full">
             <form onSubmit={handleSubmit} className="py-2 w-full space-x-2 max-w-md flex justify-between items-center mb-4">

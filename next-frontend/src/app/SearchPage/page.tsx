@@ -5,7 +5,9 @@ import NavBar from '../components/AccountNavbar';
 import { useRouter } from 'next/navigation';
 
 
-const SearchPage = () => {
+const SearchPage = () => {    
+
+    //Check if the token has expired
     const isTokenExpired = (token: string) => {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const exp = payload.exp * 1000;
@@ -14,6 +16,7 @@ const SearchPage = () => {
     };
     const router = useRouter();
 
+    //If the token has expired, redirect to login page
     useEffect(() => {
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='));
         if (!accessToken || isTokenExpired(accessToken.split('=')[1])) {
@@ -21,7 +24,7 @@ const SearchPage = () => {
         }
     }, [router]);
 
-
+    //Render the navigation bar and drug search component
     return (
         <div style={{ textAlign: 'center', fontSize: '24px' }}>
             <NavBar />

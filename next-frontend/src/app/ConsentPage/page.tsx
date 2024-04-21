@@ -3,6 +3,7 @@ import { Button } from '@nextui-org/react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
+//Page to let user consent to data collection
 const ConsentPage = () => {
     const router = useRouter();
     const handleBack = async () => {

@@ -10,6 +10,8 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    //Login handler, verify email address and password pair, if correct, redirect to account page
+    //Otherwise, throw error
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -29,6 +31,7 @@ const Login: React.FC = () => {
         }
     };
 
+    //Render login page with login, password reset and other navigation button components
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>

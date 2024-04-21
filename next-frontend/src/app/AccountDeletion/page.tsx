@@ -13,6 +13,8 @@ const DeleteAccount: React.FC = (): React.ReactNode => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    //Find row in cookies that start with access, if it is not found (not authenticated), redirect user to login page
+    //Rerun effect is the router object changes to reevaluate access rights
     useEffect(() => {
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='));
         if (!accessToken) {
@@ -20,6 +22,10 @@ const DeleteAccount: React.FC = (): React.ReactNode => {
         }
     }, [router]);
 
+    //Handle account deletion, evaluate current access rights and password
+    //If no error is thrown, delete account and redirect to Create Account page
+    //If the error is an Axios error and status is 400, set error message to Incorrect Password
+    //Otherwise, logs the error to console.
     const handleDelete = async () => {
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='));
         const tokenValue = accessToken ? accessToken.split('=')[1] : null;
@@ -43,6 +49,7 @@ const DeleteAccount: React.FC = (): React.ReactNode => {
         }
     };
 
+    //Renders the account deletion page with password input field for verification, navigation and confirmation buttons.
     return (
         <div>
             <div className={styles.wrapper}>

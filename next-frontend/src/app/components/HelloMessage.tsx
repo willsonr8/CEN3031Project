@@ -5,6 +5,7 @@ import axios from 'axios';
 const HelloMessage: React.FC = () => {
     const [message, setMessage] = useState<string>('');
 
+    //Fetch and set message
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -18,6 +19,7 @@ const HelloMessage: React.FC = () => {
         fetchData();
     }, []);
 
+    //Render the message on the page
     return (
         <div className="text-white">
             <p>{message}</p>

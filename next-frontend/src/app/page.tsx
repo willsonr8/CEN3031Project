@@ -1,10 +1,8 @@
 import React from "react";
-import Link from "next/link";
-import styles from "./home.module.css";
-import HelloMessage from "./components/HelloMessage";
 import NameSearch from "./components/NameSearch";
 import NavBar from "./components/HomePageNavbar";
 
+//Render the home page with the navigation bar and drug search components
 const HomePage = () => {
     return (
         <div style={{ textAlign: "center", fontSize: "24px" }}>
