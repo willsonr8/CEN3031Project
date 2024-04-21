@@ -11,7 +11,7 @@ const DeleteButton = () => {
         router.push('/AccountDeletion');
     };
 
-    //Rencer the delete account button
+    //Render the delete account button
     return (
         <Button onClick={handleDelete} className="red-dark" 
         radius="full" size="lg" type="submit" color="primary" 
