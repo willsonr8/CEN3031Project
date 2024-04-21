@@ -13,6 +13,7 @@ const NavBar = () => {
         account: 'foreground'
     });
 
+    //Navigation handler, route to correct pages depending on clicked button
     const handleNavItemClick = (navItem) => {
         setActiveNavItem(navItem);
         const newTabColors = {};
@@ -27,7 +28,7 @@ const NavBar = () => {
         }
     };
 
-    //Logout handler, on success redirec to login page
+    //Logout handler, on success redirect to login page
     const handleLogout = async () => {
       try {
           await axios.post('http://localhost:8000/api/logout/');
@@ -44,12 +45,12 @@ const NavBar = () => {
         router.push('/PrescriptionPage');
     };
 
-    //Redirect to settings page
+    //Redirect to account page
     const handleSettings = async () => {
         router.push('/AccountSettingsPage');
     };
 
-    //Render the account navigation bar component with prescription, settings and logout page tabs
+    //Render the account navigation bar component with search, prescription, and account page tab buttons
     return (
         <Navbar isBordered className="red-dark text-foreground bg-background">
             <NavbarBrand>

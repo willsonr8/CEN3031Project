@@ -12,6 +12,7 @@ import { Key } from "@react-types/shared";
 
 import "../NameSearch.css";
 
+//Drug name search component definition
 const NameSearch = () => {
     let chosen_prescriptions = [];
     const [selected, setSelected] = useState("search");
@@ -22,6 +23,8 @@ const NameSearch = () => {
     const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
     const [loading, setLoading] = useState(false);
   
+    //Submit handler, get response for a drug name search query
+    //Set error on failure, otherwise set reponse data to received data
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -37,6 +40,7 @@ const NameSearch = () => {
         }
     };
 
+    //Drug sorter based on brand name, sort by alphabetical ascending or descending depending on user choice
     const sortByBrandName = () => {
         const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
             if (sortOrder === 'asc') {
@@ -49,6 +53,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on name, sort by alphabetical ascending or descending depending on user choice
     const sortByDisplayName = () => {
         const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
             if (sortOrder === 'asc') {
@@ -61,6 +66,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on strength, sort by numerical ascending or descending depending on user choice
     const sortByStrength = () => {
         const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
             if (sortOrder === 'asc') {
@@ -73,6 +79,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on dosage form, sort by alphabetical ascending or descending depending on user choice
     const sortByDoseForm = () => {
         const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
             if (sortOrder === 'asc') {
@@ -85,6 +92,7 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
+    //Drug sorter based on route of administration, sort by alphabetical ascending or descending depending on user choice
     const sortByRoute = () => {
         const sorted = [...responseData['all drugs']].sort((a: any, b: any) => {
             if (sortOrder === 'asc') {
@@ -97,7 +105,9 @@ const NameSearch = () => {
         setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     };
 
-
+    //Drug properties table renderer
+    //If reponse data is valid (a drug is found), render table with drugs' brand name, name, strength, dosage form and route of administration
+    //Otherwise, log no drug found to console
     const renderTableData = () => {
         if (responseData && responseData["all drugs"]) {
             try {
@@ -120,6 +130,7 @@ const NameSearch = () => {
 
     // @ts-ignore
     // @ts-ignore
+    //Render the search page with search bar, navigation buttons, drugs' properties table, map of nearby pharmacies with specified drug in stock
     return (
         <div className="flex flex-col items-center w-full">
             <form

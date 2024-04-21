@@ -18,7 +18,7 @@ export default function NavBar() {
     router.push("../createaccount");
   };
 
-  //Render home page with login and signup buttons
+  //Render home page with search, login and signup components
   return (
     <Navbar isBordered  className="red-dark text-foreground bg-background" >
       <NavbarBrand>

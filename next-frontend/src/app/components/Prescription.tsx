@@ -5,6 +5,7 @@ import styles from '../prescriptions.module.css';
 import { Button } from '@nextui-org/react';
 import { CircularProgress } from "@nextui-org/react";
 
+//Define prescription properties
 interface Prescription {
   rxid: number;
   medication_name: string;
@@ -13,6 +14,7 @@ interface Prescription {
   pharmacy_name: string;
 }
 
+//Define drug properties
 interface Drug {
   rxtermsProperties: {
     brandName: string;
@@ -30,6 +32,7 @@ const Prescriptions = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [loading, setLoading] = useState(false);
 
+  //Date formatter
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -38,6 +41,9 @@ const Prescriptions = () => {
     return `${month}/${day}/${year}`;
   };
 
+  //Fetch user's prescriptions
+  //Verify access token in cookie, if not found then throws error
+  //Otherwise, set user's presciptions to response if no futher error is thrown, gives an error if one is thrown
   useEffect(() => {
     const fetchPrescriptions = async () => {
       const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
@@ -58,6 +64,8 @@ const Prescriptions = () => {
     fetchPrescriptions();
   }, []);
 
+  //Function to search for alternative drug options in user's prescription
+  //Set response to found data if at least one alternative is found, throw error otherwise
   const searchAlternatives = async (medication_name: string) => {
     setError(null);
     setLoading(true);
@@ -75,6 +83,10 @@ const Prescriptions = () => {
     }
   };
 
+  //Function to delete user's prescription
+  //Verify access token and confirm if user wants to delete prescription
+  //If confirmed, delete the prescription and throw an error is one is encountered
+  //Else, cancel the deletion 
   const deletePrescription = async (rxid: any) => {
     const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='))?.split('=')[1];
     if (!accessToken) {
@@ -99,6 +111,7 @@ const Prescriptions = () => {
     }
   };
 
+  //Function to sort drugs in alphabetical order
   const sortBy = (key: keyof Drug['rxtermsProperties']) => {
     if (responseData && responseData['all drugs']) {
       const sorted = [...responseData['all drugs']].sort((a, b) => {
@@ -111,6 +124,7 @@ const Prescriptions = () => {
     }
   };
 
+  //Render prescription page with prescription history, drug data, prescription sorting and management functions buttons
   return (
     <div className={styles.prescriptionContainer}>
       <h1>Prescription History</h1>

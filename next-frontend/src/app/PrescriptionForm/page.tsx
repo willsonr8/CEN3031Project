@@ -15,6 +15,7 @@ const PrescriptionForm: React.FC = () => {
     const [pharmacy_name, setPharmacy_name] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    //Check if token has expired
     const isTokenExpired = (token: string) => {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const exp = payload.exp * 1000;
@@ -23,6 +24,7 @@ const PrescriptionForm: React.FC = () => {
     };
     const router = useRouter();
 
+    //If token has expired redirect to login page
     useEffect(() => {
         const accessToken = document.cookie.split('; ').find(row => row.startsWith('access='));
         if (!accessToken || isTokenExpired(accessToken.split('=')[1])) {
@@ -39,6 +41,7 @@ const PrescriptionForm: React.FC = () => {
         "Publix"
     ];
 
+    //Handler to add new prescription data
     const handlePrescription = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -50,6 +53,8 @@ const PrescriptionForm: React.FC = () => {
             return;
         }
 
+        //Add new prescription under the current authorization token
+        //If an error is thrown, set error message, otherwise add the prescription as normal
         try {
             const response = await axios.post("http://localhost:8000/api/prescriptions/", {
                 rxid,
@@ -62,11 +67,7 @@ const PrescriptionForm: React.FC = () => {
             window.location.href = "/PrescriptionPage";
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                if (error.response.status === 400) {
-                    setErrorMessage("Prescription failed. Please try again.");
-                } else {
-                    setErrorMessage("Prescription failed. Please try again.");
-                }
+                setErrorMessage("Prescription failed. Please try again.");
             } else {
                 console.error(error);
             }
@@ -77,6 +78,7 @@ const PrescriptionForm: React.FC = () => {
         router.push('/PrescriptionPage');
     };
 
+    //Render the add new prescription form with appropriate data input fields and navigation buttons components
     const today = new Date().toISOString().split('T')[0];
     return (
         <div className={styles.wrapper}>

@@ -3,6 +3,7 @@ import {Button} from '@nextui-org/button';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
+//Add prescription button component to add new prescription by redirecting to an add prescription page
 const PrescriptionButton = () => {
     const router = useRouter();
     const Add = async () => {
