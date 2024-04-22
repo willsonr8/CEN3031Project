@@ -1,45 +1,49 @@
 .prescriptionContainer {
-    text-align: center;
-    margin: 0 auto;
-    width: 80%;
-  }
-  
-  .prescriptionTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .prescriptionTable td {
-    border: 1px solid #dddddd;
-    padding: 8px;
-    color: #ffffff;
-  }
+  text-align: center;
+  margin: 0 auto;
+  width: 80%;
+}
 
-  .prescriptionTable th {
-    border: 1px solid #dddddd;
-    padding: 8px;
-    color: #000000;
-  }
+.prescriptionTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-  .searchResults {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
+.prescriptionTable td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  color: #ffffff;
+}
 
-  .searchResults td {
-    border: 1px solid #dddddd;
-    padding: 8px;
-    color: #ffffff;
-  }
+.prescriptionTable th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  color: #000000;
+}
 
-  .searchResults th {
-    border: 1px solid #dddddd;
-    padding: 8px;
-    color: #FFFFFF;
-  }
+.prescriptionTable th {
+  background-color: #f2f2f2;
+}
 
-  .searchResults th {
-    background-color: #f40d30;
-  }
+.searchResults {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.searchResults td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  color: #ffffff;
+}
+
+.searchResults th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  color: #FFFFFF;
+}
+
+.searchResults th {
+  background-color: #f40d30;
+}

@@ -31,6 +31,10 @@ const Login: React.FC = () => {
         }
     };
 
+    const handleForgotPassword = async () => {
+        window.location.href = "/ForgotPassword";
+    };
+
     //Render login page with login, password reset and other navigation button components
     return (
         <div className={styles.wrapper}>
@@ -46,7 +50,7 @@ const Login: React.FC = () => {
                         <Image src="/icons/password.png" width={19} height={22} alt="password" />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <div className={styles.forgotPassword}>Lost Password?</div>
+                    <div className={styles.forgotPassword} onClick={handleForgotPassword}>Lost Password?</div>
                     {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
                     <div className={styles.buttonContainer}>
                         <Link href="/">
