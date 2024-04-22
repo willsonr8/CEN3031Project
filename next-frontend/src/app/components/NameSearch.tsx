@@ -1,11 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import { Button } from "@nextui-org/button";
-import { Input, Tab, Tabs } from "@nextui-org/react";
+import { Input, Tab, Tabs, Button,  CircularProgress } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
 import DrugStoresMap from "@/app/components/DrugStoresMap";
-import { CircularProgress } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
 import "../NameSearch.css";
 
@@ -13,7 +11,7 @@ import "../NameSearch.css";
 const NameSearch = () => {
     let chosen_prescriptions = [];
     const [selected, setSelected] = useState("search");
-    const [drug_name, set_drug_name] = useState("");
+    const [drug_name, setDrug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState<boolean>(false);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -110,11 +108,11 @@ const NameSearch = () => {
             try {
                 return responseData['all drugs'].map((drug: any, index: number) => (
                     <tr key={index}>
-                        <td>{drug.rxtermsProperties.brandName}</td>
-                        <td className="display-name">{drug.rxtermsProperties.displayName}</td>
-                        <td>{drug.rxtermsProperties.strength}</td>
-                        <td>{drug.rxtermsProperties.rxtermsDoseForm}</td>
-                        <td>{drug.rxtermsProperties.route}</td>
+                        <td>{drug?.rxtermsProperties?.brandName}</td>
+                        <td className="display-name">{drug?.rxtermsProperties?.displayName}</td>
+                        <td>{drug?.rxtermsProperties?.strength}</td>
+                        <td>{drug?.rxtermsProperties?.rxtermsDoseForm}</td>
+                        <td>{drug?.rxtermsProperties?.route}</td>
                     </tr>
                 ));
             } catch (error) {
@@ -136,7 +134,7 @@ const NameSearch = () => {
             >
                 <Input
                     value={drug_name}
-                    onChange={(e) => set_drug_name(e.target.value)}
+                    onChange={(e) => setDrug_name(e.target.value)}
                     type="search"
                     size="lg"
                     radius="full"

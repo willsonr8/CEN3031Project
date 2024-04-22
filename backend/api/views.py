@@ -13,7 +13,7 @@ from rest_framework import generics, permissions
 from .models import Prescription
 from .serializers import PrescriptionSerializer
 
-def get_data(request):
+def get_data():
     message = {'text': 'Hello from Django!'}
     return JsonResponse(message)
 

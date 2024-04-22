@@ -24,7 +24,7 @@ const CreateAccountPage: React.FC = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:8000/api/users/", {
+            await axios.post("http://localhost:8000/api/users/", {
                 first_name: name,
                 email,
                 date_of_birth: dateOfBirth,

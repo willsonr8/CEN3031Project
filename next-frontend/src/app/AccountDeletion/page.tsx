@@ -31,7 +31,7 @@ const DeleteAccount: React.FC = (): React.ReactNode => {
         const tokenValue = accessToken ? accessToken.split('=')[1] : null;
         console.log(tokenValue);
         try {
-            const response = await axios.delete("http://localhost:8000/api/users/me/", {
+            await axios.delete("http://localhost:8000/api/users/me/", {
                 data: { current_password: password },
                 headers: {
                     'Authorization': `Bearer ${tokenValue}`,

@@ -1,17 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button } from "@nextui-org/button";
-import { Input, Tab, Tabs } from "@nextui-org/react";
+import { Input, Tab, Tabs, CircularProgress, Button } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
-import { CircularProgress } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
 import "../NameSearch.css";
 import DrugStoresMap from "@/app/components/DrugStoresMap";
 
 const NameSearch = () => {
     const [selected, setSelected] = useState("search");
-    const [drug_name, set_drug_name] = useState("");
+    const [drug_name, setDrug_name] = useState("");
     const [responseData, setResponseData] = useState<any>(null);
     const [error, setError] = useState(false);
     const [searchHistory, setSearchHistory] = useState([]);
@@ -188,11 +186,11 @@ const NameSearch = () => {
             try {
                 return (responseData['all drugs'] as any[]).map((drug: any, index: number) => (
                     <tr key={index}>
-                        <td>{drug.rxtermsProperties.brandName}</td>
-                        <td className="display-name">{drug.rxtermsProperties.displayName}</td>
-                        <td>{drug.rxtermsProperties.strength}</td>
-                        <td>{drug.rxtermsProperties.rxtermsDoseForm}</td>
-                        <td>{drug.rxtermsProperties.route}</td>
+                        <td>{drug?.rxtermsProperties?.brandName}</td>
+                        <td className="display-name">{drug?.rxtermsProperties?.displayName}</td>
+                        <td>{drug?.rxtermsProperties?.strength}</td>
+                        <td>{drug?.rxtermsProperties?.rxtermsDoseForm}</td>
+                        <td>{drug?.rxtermsProperties?.route}</td>
                     </tr>
                 ));
             } catch (error) {
@@ -208,7 +206,7 @@ const NameSearch = () => {
             <form onSubmit={handleSubmit} className="py-2 w-full space-x-2 max-w-md flex justify-between items-center mb-4">
                 <Input
                     value={drug_name}
-                    onChange={(e) => set_drug_name(e.target.value)}
+                    onChange={(e) => setDrug_name(e.target.value)}
                     type="search"
                     size="lg"
                     radius="full"
