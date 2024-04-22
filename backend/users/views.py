@@ -8,6 +8,11 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from users.models import UserAccount
+from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Custom TokenObtainPairView to set the access and refresh tokens as cookies
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -84,3 +89,20 @@ class LogoutView(APIView):
         response.delete_cookie("refresh")
 
         return response
+
+# Custom view to reset the password of the user, Send email implementation is not included,
+# so I cannot send the reset password link to the user.'
+@csrf_exempt
+def reset_password(request):
+    data = json.loads(request.body)
+    email = data.get('email')
+    new_password = data.get('new_password')
+    try:
+        user = UserAccount.objects.get(email=email)
+        user.password = make_password(new_password)
+        user.save()
+        return JsonResponse({'status': 'success', 'message': 'Password has been reset.'})
+    except UserAccount.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'User does not exist.'})
+
+
