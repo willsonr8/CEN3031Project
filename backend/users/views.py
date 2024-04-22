@@ -101,8 +101,8 @@ def reset_password(request):
         user = UserAccount.objects.get(email=email)
         user.password = make_password(new_password)
         user.save()
-        return JsonResponse({'status': 'success', 'message': 'Password has been reset.'})
+        return JsonResponse({'status': 'success', 'message': 'Password has been reset.'}, status=200)
     except UserAccount.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'User does not exist.'})
+        return JsonResponse({'status': 'error', 'message': 'User does not exist.'}, status=404)
 
 
