@@ -7,6 +7,8 @@ import styles from "../home.module.css";
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
     const [newPassword, setnewPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -16,6 +18,8 @@ const ForgotPassword: React.FC = () => {
         try {
             await axios.post("http://localhost:8000/api/password/reset/", {
                 email,
+                first_name: name,
+                date_of_birth: dateOfBirth,
                 new_password: newPassword,
             });
             window.location.href = "/login";
@@ -36,8 +40,16 @@ const ForgotPassword: React.FC = () => {
                 <div className={styles.text}>Password Reset</div>
                 <form className={styles.inputs} onSubmit={handleForgotPassword}>
                     <div className={styles.input}>
-                        <Image src="/icons/user.png" width={20} height={21} alt="user" />
+                        <Image src="/icons/email.png" width={20} height={21} alt="user" />
                         <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                    <div className={styles.input}>
+                        <Image src="/icons/user.png" width={22} height={22} alt="user" />
+                        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div className={styles.input}>
+                        <Image src="/icons/calendar.png" width={22} height={22} alt="calendar" />
+                        <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
                     </div>
                     <div className={styles.input}>
                         <Image src="/icons/password.png" width={19} height={22} alt="password" />
